@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ReceiptPageActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/issue_receipt"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/customer_full_name"
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="15dp"
+        android:inputType="text"
+        android:hint="@string/customer_name"
+        android:maxLength="30"
+        android:background="@drawable/rounded_edittext"
+        />
+
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/customer_phone_number"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="15dp"
+        android:inputType="phone"
+        android:hint="@string/customer_phone_number"
+        android:maxLength="20"
+        android:background="@drawable/rounded_edittext"/>
+
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/item_purchased"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="15dp"
+        android:inputType="text"
+        android:hint="@string/purchased_items"
+        android:maxLength="30"
+        android:background="@drawable/rounded_edittext" />
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/amount_paid"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="15dp"
+        android:inputType="number"
+        android:hint="@string/amount_ghs"
+        android:maxLength="10"
+        android:background="@drawable/rounded_edittext" />
+
+
+
+    <android.widget.Button
+        android:id="@+id/issue_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_button"
+        android:text="@string/issue"
+        android:textColor="#ffffff"
+        android:maxLength="30"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+
+
+</LinearLayout>

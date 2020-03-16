@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ececec"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/login"
+        android:textColor="@color/colorPrimaryDark"/>
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/phone_number"
+        android:layout_width="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="15dp"
+        android:inputType="phone"
+        android:hint="@string/phone_number"
+        android:maxLength="20"
+        android:background="@drawable/rounded_edittext"/>
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="15dp"
+        android:inputType="textPassword"
+        android:hint="@string/password"
+        android:maxLength="30"
+        android:background="@drawable/rounded_edittext"/>
+
+    <TextView
+        android:id="@+id/launch_registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/already_registered"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_margin="30dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="end"
+        android:onClick="launchRegistration"/>
+
+    <android.widget.Button
+        android:id="@+id/login_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_button"
+        android:text="@string/sign_in"
+        android:textColor="@color/splash_back_color"
+        android:maxLength="30"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+</LinearLayout>

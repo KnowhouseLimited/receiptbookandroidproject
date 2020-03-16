@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/home_icon"
+            android:title="@string/home"
+            android:checked="true"/>
+
+        <item android:id="@+id/inbox"
+            android:icon="@drawable/inbox_icon"
+            android:title="@string/inbox"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/transactions"
+            android:icon="@drawable/transactions_icon"
+            android:title="@string/transactions"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/sales"
+            android:icon="@drawable/sales"
+            android:title="@string/sales"
+            android:checked="false"/>
+    </group>
+
+    <item android:title="@string/support">
+        <menu>
+            <item
+                android:id="@+id/nav_feedback"
+                android:icon="@android:drawable/sym_action_email"
+                android:title="@string/give_us_feedback"/>
+        </menu>
+    </item>
+</menu>

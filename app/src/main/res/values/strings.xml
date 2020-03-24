@@ -38,4 +38,13 @@
     <string name="save">Save</string>
     <string name="time">Time</string>
     <string name="dummy_text">Name Surname Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</string>
+    <string name="api_key">fd68e6c4a32df597c96a54f9306375b1</string>
+    <string name="web_service_url">http://api.openweathermap.org/data/2.5/weather/?q=</string>
+    <string name="read_error">Unable to read weather data</string>
+    <string name="connect_error">Unable to connect to OpenWeatherMap.org</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="humidity_57">Humidity: %s</string>
+    <string name="pressure_1015_hpa">Pressure: %s hPa</string>
+    <string name="wind_14_km_h_sse">Wind: %s km/h SSE</string>
+    <string name="feels_like">Feels Like : %s</string>
 </resources>

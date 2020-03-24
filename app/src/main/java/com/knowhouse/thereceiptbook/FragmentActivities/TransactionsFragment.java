@@ -1,8 +1,6 @@
 package com.knowhouse.thereceiptbook.FragmentActivities;
 
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,7 +22,7 @@ import com.knowhouse.thereceiptbook.Constants;
 import com.knowhouse.thereceiptbook.ImageConverter;
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.knowhouse.thereceiptbook.R;
-import com.knowhouse.thereceiptbook.TransactionsClass;
+import com.knowhouse.thereceiptbook.UtitlityClasses.TransactionsClass;
 import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 
 import org.json.JSONArray;

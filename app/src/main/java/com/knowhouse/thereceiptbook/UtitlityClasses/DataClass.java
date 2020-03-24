@@ -1,6 +1,6 @@
-package com.knowhouse.thereceiptbook;
+package com.knowhouse.thereceiptbook.UtitlityClasses;
 
-public class HomeFeedClass {
+public class DataClass {
 
     private String totalNumberOfCustomer;       //string to hold total number of customers for the day
     private String totalNumberOfPurchasedItems;      //String to hold total number of purchased items day
@@ -9,7 +9,7 @@ public class HomeFeedClass {
 
 
     //Constructor
-    public HomeFeedClass(int userId){
+    public DataClass(int userId){
 
         this.userId = userId;   //set the user id
     }

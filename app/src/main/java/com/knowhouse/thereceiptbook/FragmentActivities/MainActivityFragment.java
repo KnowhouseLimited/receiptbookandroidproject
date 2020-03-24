@@ -5,7 +5,6 @@
 
 package com.knowhouse.thereceiptbook.FragmentActivities;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -40,7 +39,7 @@ public class MainActivityFragment extends Fragment {
     private WeatherFeedAdapter adapter;
     private WeatherClass myDataSet;
     private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView weatherRecycler;
+    private RecyclerView recyclerView;
 
     private long date;
     private String town;
@@ -59,9 +58,15 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        weatherRecycler = (RecyclerView) inflater.inflate(R.layout.fragment_main,
+        recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_main,
                 container, false);
+        //weather recycler details
+        RecyclerView weather = weatherRecyclerRun(recyclerView);
+        return weather;
 
+    }
+
+    private RecyclerView weatherRecyclerRun(RecyclerView weatherRecycler) {
 
 
         weatherRecycler.setHasFixedSize(true);
@@ -78,7 +83,9 @@ public class MainActivityFragment extends Fragment {
             Snackbar.make(weatherRecycler.findViewById(R.id.coordinatorLayout),
                     R.string.invalid_url,Snackbar.LENGTH_LONG).show();
         }
+
         return weatherRecycler;
+
     }
 
     //Create an openweathermap.org web service URL using city
@@ -97,7 +104,6 @@ public class MainActivityFragment extends Fragment {
             return null;
         }
     }
-
 
     //Making the REST web service call to get weather data and
     //saves the data to a local HTML file
@@ -124,7 +130,7 @@ public class MainActivityFragment extends Fragment {
                         }
                     }
                     catch (IOException e){
-                        Snackbar.make(weatherRecycler.findViewById(R.id.coordinatorLayout),
+                        Snackbar.make(recyclerView.findViewById(R.id.coordinatorLayout),
                                 R.string.read_error,Snackbar.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
@@ -132,12 +138,12 @@ public class MainActivityFragment extends Fragment {
                     return new JSONObject(builder.toString());
                 }
                 else{
-                    Snackbar.make(weatherRecycler.findViewById(R.id.coordinatorLayout),
+                    Snackbar.make(recyclerView.findViewById(R.id.coordinatorLayout),
                             R.string.read_error,Snackbar.LENGTH_LONG).show();
                 }
             }
             catch (Exception e){
-                Snackbar.make(weatherRecycler.findViewById(R.id.coordinatorLayout),
+                Snackbar.make(recyclerView.findViewById(R.id.coordinatorLayout),
                         R.string.connect_error,Snackbar.LENGTH_LONG).show();
                 e.printStackTrace();
             }
@@ -180,16 +186,11 @@ public class MainActivityFragment extends Fragment {
                     wind,icon,temperature,feelsLike,cloud);
 
             WeatherFeedAdapter weatherFeedAdapter = new WeatherFeedAdapter(weatherClass,getContext());
-            weatherRecycler.setAdapter(weatherFeedAdapter);
+            recyclerView.setAdapter(weatherFeedAdapter);
 
-
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
 }

@@ -32,7 +32,7 @@
     <string name="customer_phone_number">Customer\'s Phone Number</string>
     <string name="purchased_items">Purchase Item</string>
     <string name="amount_ghs">Amount</string>
-    <string name="issue">Issue</string>
+    <string name="issue">ISSUE</string>
     <string name="issue_receipt">Issue Receipt</string>
     <string name="edit">Edit</string>
     <string name="save">Save</string>

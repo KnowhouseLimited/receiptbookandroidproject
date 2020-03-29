@@ -5,9 +5,7 @@
     android:id="@+id/home_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="2dp"
+    app:cardCornerRadius="10dp"
     app:cardBackgroundColor="@color/splash_back_color"
     app:contentPadding="5dp">
 
@@ -16,14 +14,15 @@
         android:id="@+id/parentLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:id="@+id/weatherDataLeft"
             android:layout_width="0dp"
             android:layout_weight="1.5"
             android:layout_height="match_parent"
-            android:padding="10dp"
+            android:padding="5dp"
             android:orientation="vertical">
 
             <TextView
@@ -78,7 +77,8 @@
                 android:id="@+id/weatherIcon"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter"
+                android:contentDescription="@string/image_of_the_cloud"/>
 
             <TextView
                 android:id="@+id/weatherTemp"

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.knowhouse.thereceiptbook.R;
-import com.knowhouse.thereceiptbook.UtitlityClasses.WeatherClass;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -22,6 +21,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -38,36 +38,37 @@ public class WeatherFeedAdapter extends
     private String temperature;
     private String feelsLike;
     private String cloud;
-    private final int MDATASET = 1;
     private Context context;
     private Map<String,Bitmap> bitmaps = new HashMap<>();
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder{
 
         private CardView cardView;
         //Define the view to be used for each data item
 
-        public ViewHolder(@NonNull CardView itemView) {
+        ViewHolder(@NonNull CardView itemView) {
             super(itemView);
             cardView = itemView;
         }
     }
 
     //Constructor for the WeatherFeedAdapter
-    public WeatherFeedAdapter(WeatherClass weatherClass,Context context){
+    public WeatherFeedAdapter(long date,String town,double humidity,double pressure,
+                              double wind,String icon,double temperature,double feelsLike,
+                              String cloud,Context context){
 
         NumberFormat numberFormat = NumberFormat.getInstance();
         numberFormat.setMaximumFractionDigits(0);
 
-        this.date = convertTimeStampToDay(weatherClass.getDate());
-        this.town = weatherClass.getTown();
-        this.humidity = NumberFormat.getPercentInstance().format(weatherClass.getHumidity()/100.0);
-        this.pressure = numberFormat.format(weatherClass.getPressure());
-        this.wind = numberFormat.format(weatherClass.getWind());
-        this.icon = "http://openweathermap.org/img/w/"+weatherClass.getIcon()+".png";
-        this.temperature = numberFormat.format(weatherClass.getTemperature()) + "\u00B0C";
-        this.feelsLike = numberFormat.format(weatherClass.getFeelsLike())+"\u00B0C";
-        this.cloud = weatherClass.getCloud();
+        this.date = convertTimeStampToDay(date);
+        this.town = town;
+        this.humidity = NumberFormat.getPercentInstance().format(humidity/100.0);
+        this.pressure = numberFormat.format(pressure);
+        this.wind = numberFormat.format(wind);
+        this.icon = "http://openweathermap.org/img/w/"+icon+".png";
+        this.temperature = numberFormat.format(temperature) + "\u00B0C";
+        this.feelsLike = numberFormat.format(feelsLike)+"\u00B0C";
+        this.cloud = cloud;
         this.context = context;
 
     }
@@ -94,8 +95,6 @@ public class WeatherFeedAdapter extends
         TextView user_cloud = cardView.findViewById(R.id.weatherCloud);
 
 
-
-
         user_town.setText(town);
         user_humidity.setText(context.getString((R.string.humidity_57),String.valueOf(humidity)));
         user_pressure.setText(context.getString((R.string.pressure_1015_hpa),String.valueOf(pressure)));
@@ -118,7 +117,7 @@ public class WeatherFeedAdapter extends
     @Override
     public int getItemCount() {
 
-        return MDATASET ;
+        return 1;
     }
 
     //Convert the date
@@ -132,7 +131,7 @@ public class WeatherFeedAdapter extends
                 tz.getOffset(calendar.getTimeInMillis()));
 
         //SimpleDateFormat that returns the day's name
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM, d, yyyy - EEE");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM, d, yyyy - EEE", Locale.US);
         return dateFormatter.format(calendar.getTime());
     }
 
@@ -141,7 +140,7 @@ public class WeatherFeedAdapter extends
         private ImageView imageView;        //display the thumbnail
 
         //store ImageView on which to set the downloaded Bitmap
-        public LoadImageTask(ImageView imageView){
+        LoadImageTask(ImageView imageView){
             this.imageView = imageView;
         }
 
@@ -170,6 +169,7 @@ public class WeatherFeedAdapter extends
                 e.printStackTrace();
             }
             finally {
+                assert connection != null;
                 connection.disconnect();    //close the HTTPURLConnection
             }
 

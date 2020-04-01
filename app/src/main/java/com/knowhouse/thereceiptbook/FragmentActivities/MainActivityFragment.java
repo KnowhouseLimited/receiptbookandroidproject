@@ -1,6 +1,6 @@
 //Author: Enoch Viewu
 //Cooperation: KnowHouse
-//Date Modified: 4th Feb, 2020
+//Date Modified: 1st April, 2020
 //Code: The MainActivityFragment of the application
 
 package com.knowhouse.thereceiptbook.FragmentActivities;
@@ -38,7 +38,6 @@ public class MainActivityFragment extends Fragment{
                 view,getContext());
 
         return view;
-
     }
 
 }

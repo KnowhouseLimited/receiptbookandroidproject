@@ -19,9 +19,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class DataClass{
@@ -74,8 +77,15 @@ public class DataClass{
                                 String issuerCompanyName = object[i].getString("issuerCompany");   //variable to hold the issuer of receipts company name
                                 String noOfReceiptIssuedPerDay = String.valueOf(object[i].getInt("noReceiptIssued"));   //variable to hold the number of receipts issued in a day
                                 String totalOfItemsSoldPerDay = String.valueOf(object[i].getInt("totalItemsSold"));    //variable to hold the number of items sold in a day
-                                NumberFormat currency = NumberFormat.getCurrencyInstance();
+
+                                Locale locale = new Locale("English","Ghana","GH");
+                                String symbols = "GHS ";
+                                DecimalFormat currency = (DecimalFormat)NumberFormat.getCurrencyInstance();
+                                DecimalFormatSymbols symbol = new DecimalFormatSymbols(locale);
+                                symbol.setCurrencySymbol(symbols);
+                                currency.setDecimalFormatSymbols(symbol);
                                 String totalAmountMadePerDay = currency.format(object[i].getInt("totalPriceOfItemsSold"));      //variable to hold the number of items gotten in a day
+
                                 String itemWithHighestReceiptNumberPerDay = object[i].getString("itemWithHighestReceipt");   //variable to hold the number of highest receipt issued item
                                 populateCardView(issuerCompanyName,noOfReceiptIssuedPerDay,totalOfItemsSoldPerDay,
                                         totalAmountMadePerDay,itemWithHighestReceiptNumberPerDay);

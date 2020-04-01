@@ -1,59 +1,128 @@
 package com.knowhouse.thereceiptbook.UtitlityClasses;
 
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.support.v4.widget.NestedScrollView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.knowhouse.thereceiptbook.Adapters.WeatherFeedAdapter;
 import com.knowhouse.thereceiptbook.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
-public class WeatherClass {
 
-    private Context context;
-    private RecyclerView weatherRecyclerView;
-    private View view;
+public class WeatherClass implements AsyncResponse{
+
+
     private String city;
+    private NestedScrollView view;
+    private Context context;
+
+    private double humidity;
+    private double pressure;
+    private double wind;
+    private String icon;
+    private double temperature;
+    private double feelsLike;
+    private String cloud;
+    private String townString;
+    private long dateLong;
 
 
-    public WeatherClass(String city, RecyclerView weatherRecyclerView, View view,
-                        Context context) {
 
-        this.context = context;
-        this.weatherRecyclerView = weatherRecyclerView;
-        this.view = view;
-        this.city = city;
+    private String dateString;
+    private String stringTown;
+    private String humidityString;
+    private String pressureString;
+    private String windString;
+    private String iconString;
+    private String temperatureString;
+    private String feelsLikeString;
+    private String cloudString;
+
+    private Map<String, Bitmap> bitmaps = new HashMap<>();
+
+
+    public WeatherClass(String city,
+                        NestedScrollView view, Context context) {
+       this.city = city;
+       this.view = view;
+       this.context = context;
+       retrieveWeatherData();
+    }
+
+    @Override
+    public void processFinish(JSONObject forecast) {
+        convertJson(forecast);
+        convertPrimitiveToString();
+        populateCardView();
+    }
+
+    private void populateCardView() {
+        TextView date = view.findViewById(R.id.weatherDate);
+        TextView town = view.findViewById(R.id.weatherTown);
+        TextView humidity = view.findViewById(R.id.weatherHumidity);
+        TextView pressure = view.findViewById(R.id.weatherPressure);
+        TextView wind = view.findViewById(R.id.weatherWind);
+        ImageView icon = view.findViewById(R.id.weatherIcon);
+        TextView temperature = view.findViewById(R.id.weatherTemp);
+        TextView feelsLike = view.findViewById(R.id.weatherFeelsLike);
+        TextView cloud = view.findViewById(R.id.weatherCloud);
+
+        town.setText(stringTown);
+        humidity.setText(context.getString((R.string.humidity_57),String.valueOf(humidityString)));
+        pressure.setText(context.getString((R.string.pressure_1015_hpa),String.valueOf(pressureString)));
+        wind.setText(context.getString((R.string.wind_14_km_h_sse),String.valueOf(windString)));
+        temperature.setText(String.valueOf(temperatureString));
+        feelsLike.setText(context.getString((R.string.feels_like),String.valueOf(feelsLikeString)));
+        cloud.setText(cloudString);
+        date.setText(dateString);
+
+        if(bitmaps.containsKey(iconString)){
+            icon.setImageBitmap(bitmaps.get(iconString));
+        }else{
+            LoadImageTask loadImageTask = new LoadImageTask(icon);
+            loadImageTask.execute(iconString);
+        }
 
     }
 
-    public void retrieveWeatherData(){
+
+    private void retrieveWeatherData(){
         /*
          * Recycler view for the weather section
          */
+
         URL url = createURL(city);
         if(url != null){
             GetWeatherTask getLocalWeatherTask = new GetWeatherTask();
-            getLocalWeatherTask.execute(url);
+            getLocalWeatherTask.delegate = this;
+            getLocalWeatherTask.execute(url,view);
         }
         else{
-            Snackbar.make(weatherRecyclerView.findViewById(R.id.coordinatorLayout),
+            Snackbar.make(view.findViewById(R.id.coordinatorLayout),
                     R.string.invalid_url,Snackbar.LENGTH_LONG).show();
         }
 
     }
-
 
     //Create an openweathermap.org web service URL using city
     private URL createURL(String city){
@@ -72,89 +141,105 @@ public class WeatherClass {
         }
     }
 
-    //Making the REST web service call to get weather data and
-    //saves the data to a local HTML file
-    private class GetWeatherTask
-            extends AsyncTask<URL,Void, JSONObject> {
-        @Override
-        protected JSONObject doInBackground(URL... urls) {
-            HttpURLConnection connection = null;
 
-            try{
-                connection = (HttpURLConnection) urls[0].openConnection();
-                int response = connection.getResponseCode();
-
-                if(response == HttpURLConnection.HTTP_OK){
-                    StringBuilder builder = new StringBuilder();
-
-                    try(BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()))){
-
-                        String line;
-
-                        while ((line = reader.readLine()) != null){
-                            builder.append(line);
-                        }
-                    }
-                    catch (IOException e){
-                        Snackbar.make(view.findViewById(R.id.coordinatorLayout),
-                                R.string.read_error,Snackbar.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
-
-                    return new JSONObject(builder.toString());
-                }
-                else{
-                    Snackbar.make(view.findViewById(R.id.coordinatorLayout),
-                            R.string.read_error,Snackbar.LENGTH_LONG).show();
-                }
-            }
-            catch (Exception e){
-                Snackbar.make(view.findViewById(R.id.coordinatorLayout),
-                        R.string.connect_error,Snackbar.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-            finally {
-                assert connection != null;
-                connection.disconnect();    //close the HttpURLConnection
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-
-            convertJSONArrayToArrayList(jsonObject);
-        }
-    }
-
-    //Create weather objects from JSONObject containing the forecast
-    private void convertJSONArrayToArrayList(JSONObject forecast){
+    private void convertJson(JSONObject forecast) {
 
         try{
             JSONObject main = forecast.getJSONObject("main");
             JSONObject windJSON = forecast.getJSONObject("wind");
-            String townString = forecast.getString("name");
-            long dateLong = forecast.getLong("dt");
             JSONArray weatherArray = forecast.getJSONArray("weather");
             JSONObject weatherObject = weatherArray.getJSONObject(0);
 
             //Declaration of the values for the weather cardview
-            double humidity = main.getDouble("humidity");
-            double pressure = main.getDouble("pressure");
-            double wind = windJSON.getDouble("speed");
-            String icon = weatherObject.getString("icon");
-            double temperature = main.getDouble("temp");
-            double feelsLike = main.getDouble("feels_like");
-            String cloud = weatherObject.getString("description");
-
-            WeatherFeedAdapter weatherFeedAdapter = new WeatherFeedAdapter(dateLong,townString, humidity,
-                    pressure, wind, icon, temperature, feelsLike, cloud,context);
-            weatherRecyclerView.setAdapter(weatherFeedAdapter);
+            //Declaration of the values for the weather cardview
+            humidity = main.getDouble("humidity");
+            pressure = main.getDouble("pressure");
+            wind = windJSON.getDouble("speed");
+            icon = weatherObject.getString("icon");
+            temperature = main.getDouble("temp");
+            feelsLike = main.getDouble("feels_like");
+            cloud = weatherObject.getString("description");
+            townString = forecast.getString("name");
+            dateLong = forecast.getLong("dt");
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private void convertPrimitiveToString(){
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(0);
+
+        dateString = convertTimeStampToDay(this.dateLong);
+        stringTown = this.townString;
+        humidityString = NumberFormat.getPercentInstance().format(this.humidity/100.0);
+        pressureString = numberFormat.format(this.pressure);
+        windString = numberFormat.format(this.wind);
+        iconString = "http://openweathermap.org/img/w/"+this.icon+".png";
+        temperatureString = numberFormat.format(this.temperature) + "\u00B0C";
+        feelsLikeString = numberFormat.format(this.feelsLike)+"\u00B0C";
+        cloudString = this.cloud;
+    }
+
+    //Convert the date
+    private  static String convertTimeStampToDay(long timeStamp){
+        Calendar calendar = Calendar.getInstance();     //create calendar
+        calendar.setTimeInMillis(timeStamp*1000);
+        TimeZone tz = TimeZone.getDefault();        //get device's time zone
+
+        //Adjust time for device's time zone
+        calendar.add(Calendar.MILLISECOND,
+                tz.getOffset(calendar.getTimeInMillis()));
+
+        //SimpleDateFormat that returns the day's name
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM, d, yyyy - EEE", Locale.US);
+        return dateFormatter.format(calendar.getTime());
+    }
+
+    //AsyncTask to load weather condition icons in a separate thread
+    private class LoadImageTask extends AsyncTask<String,Void,Bitmap> {
+        private ImageView imageView;        //display the thumbnail
+
+        //store ImageView on which to set the downloaded Bitmap
+        LoadImageTask(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        //load image; params[0] is the String URL representing the image
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Bitmap bitmap = null;
+            HttpURLConnection connection = null;
+
+            try {
+                URL url = new URL(params[0]);   //create URL for image
+
+                //open an HTTPURLConnection, get its InputStream
+                //and download the image
+                connection = (HttpURLConnection) url.openConnection();
+
+                try (InputStream inputStream = connection.getInputStream()) {
+                    bitmap = BitmapFactory.decodeStream(inputStream);
+                    bitmaps.put(params[0], bitmap);  //cache for later use
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                assert connection != null;
+                connection.disconnect();    //close the HTTPURLConnection
+            }
+
+            return bitmap;
+        }
+
+        //set weather condition image in list item
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            imageView.setImageBitmap(bitmap);
         }
     }
 }

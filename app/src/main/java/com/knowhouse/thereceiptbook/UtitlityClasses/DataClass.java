@@ -1,15 +1,18 @@
 package com.knowhouse.thereceiptbook.UtitlityClasses;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
-import com.knowhouse.thereceiptbook.Adapters.DataFeedAdapter;
 import com.knowhouse.thereceiptbook.Constants;
+import com.knowhouse.thereceiptbook.FragmentActivities.MainActivityFragment;
+import com.knowhouse.thereceiptbook.R;
 import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 
 import org.json.JSONArray;
@@ -17,32 +20,44 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataClass {
-    private String issuerCompanyName;   //variable to hold the issuer of receipts company name
-    private String noOfReceiptIssuedPerDay;   //variable to hold the number of receipts issued in a day
-    private String totalOfItemsSoldPerDay;    //variable to hold the number of items sold in a day
-    private String totalAmountMadePerDay;      //variable to hold the number of items gotten in a day
-    private String itemWithHighestReceiptNumberPerDay;   //variable to hold the number of highest receipt issued item
+public class DataClass{
 
     private String phoneNumber;
     private String date;
     private Context context;
-    private RecyclerView dataFeedRecyclerView;
+    private NestedScrollView view;
 
-    //Function to feed data to the data feed layout through the DataFeedAdapter
-    public DataClass(String phoneNumber, String date, Context context,
-                     RecyclerView dataFeedRecyclerView){
-
+    //Function to feed data to the data feed layout through the
+    public DataClass(String phoneNumber, String date, NestedScrollView view,Context context){
         this.phoneNumber = phoneNumber;
         this.date = date;
         this.context = context;
-        this.dataFeedRecyclerView = dataFeedRecyclerView;
+        this.view = view;
+        retrieveDataFeed();
     }
 
-    public void retrieveDataFeed(){
+
+    private void populateCardView(String issuerCompanyName,String noOfReceiptIssuedPerDay,
+            String totalOfItemsSoldPerDay,String totalAmountMadePerDay, String itemWithHighestReceiptNumberPerDay){
+        TextView user_company = view.findViewById(R.id.issuer_company_name);
+        TextView number_of_receipt = view.findViewById(R.id.tNumberOfReceipt);
+        TextView total_amount_made = view.findViewById(R.id.totalAmountMade);
+        TextView highestReceiptIssuedItem = view.findViewById(R.id.highest_receipt_issued_item);
+        TextView totalItemSold = view.findViewById(R.id.numberOfItemsSold);
+
+        user_company.setText(context.getString(R.string.company_giant_inc,issuerCompanyName));
+        number_of_receipt.setText(context.getString(R.string.total_number_of_receipt_issued_,noOfReceiptIssuedPerDay));
+        total_amount_made.setText(context.getString(R.string.total_amount_made,totalAmountMadePerDay));
+        highestReceiptIssuedItem.setText(context.getString(R.string.item_with_most_receipt,itemWithHighestReceiptNumberPerDay));
+        totalItemSold.setText(context.getString(R.string.total_number_of_items_sold,totalOfItemsSoldPerDay));
+    }
+
+    private void retrieveDataFeed(){
+
         final RequestQueue requestQueue = MySingleton.getInstance(context)
                 .getRequestQueue();
         requestQueue.start();   //start the request queue
@@ -56,21 +71,19 @@ public class DataClass {
                         {
                             object[i] = obj.getJSONObject(i);
                             if (!object[i].getBoolean("error")) {   //if for json object error in database, this message will be retrieved
-                                issuerCompanyName = object[i].getString("issuerCompany");   //variable to hold the issuer of receipts company name
-                                noOfReceiptIssuedPerDay = String.valueOf(object[i].getInt("noReceiptIssued"));   //variable to hold the number of receipts issued in a day
-                                totalOfItemsSoldPerDay = String.valueOf(object[i].getInt("totalItemsSold"));    //variable to hold the number of items sold in a day
+                                String issuerCompanyName = object[i].getString("issuerCompany");   //variable to hold the issuer of receipts company name
+                                String noOfReceiptIssuedPerDay = String.valueOf(object[i].getInt("noReceiptIssued"));   //variable to hold the number of receipts issued in a day
+                                String totalOfItemsSoldPerDay = String.valueOf(object[i].getInt("totalItemsSold"));    //variable to hold the number of items sold in a day
                                 NumberFormat currency = NumberFormat.getCurrencyInstance();
-                                totalAmountMadePerDay = currency.format(object[i].getInt("totalPriceOfItemsSold"));      //variable to hold the number of items gotten in a day
-                                itemWithHighestReceiptNumberPerDay = object[i].getString("itemWithHighestReceipt");   //variable to hold the number of highest receipt issued item
-
-                                DataFeedAdapter dataFeedAdapter = new DataFeedAdapter(issuerCompanyName, noOfReceiptIssuedPerDay,
-                                        totalOfItemsSoldPerDay, totalAmountMadePerDay, itemWithHighestReceiptNumberPerDay,context);
-
-                                dataFeedRecyclerView.setAdapter(dataFeedAdapter);
+                                String totalAmountMadePerDay = currency.format(object[i].getInt("totalPriceOfItemsSold"));      //variable to hold the number of items gotten in a day
+                                String itemWithHighestReceiptNumberPerDay = object[i].getString("itemWithHighestReceipt");   //variable to hold the number of highest receipt issued item
+                                populateCardView(issuerCompanyName,noOfReceiptIssuedPerDay,totalOfItemsSoldPerDay,
+                                        totalAmountMadePerDay,itemWithHighestReceiptNumberPerDay);
                             }else {
                                 Toast.makeText(context,"Check parameters",Toast.LENGTH_LONG).show();
                             }
                         }
+
 
                     } catch (JSONException e) {
                         e.printStackTrace();

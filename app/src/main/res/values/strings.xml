@@ -47,7 +47,7 @@
     <string name="pressure_1015_hpa">Pressure: %s hPa</string>
     <string name="wind_14_km_h_sse">Wind: %s km/h SSE</string>
     <string name="feels_like">Feels Like : %s</string>
-    <string name="company_giant_inc">Company : %s</string>
+    <string name="company_giant_inc"><b>Company :</b> %s</string>
     <string name="total_number_of_receipt_issued_"><b>Total Number Of Receipt Issued :</b> %s</string>
     <string name="total_number_of_items_sold"><b>Total Number Of Items Sold :</b> %s</string>
     <string name="total_amount_made"><b>Total Amount Made :</b> %s</string>

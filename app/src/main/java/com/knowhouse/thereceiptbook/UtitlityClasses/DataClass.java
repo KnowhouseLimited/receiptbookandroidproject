@@ -1,6 +1,8 @@
 package com.knowhouse.thereceiptbook.UtitlityClasses;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
@@ -10,6 +12,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
+import com.knowhouse.thereceiptbook.AsynTaskClasses.GetDataFeedTask;
+import com.knowhouse.thereceiptbook.AsynTaskClasses.SaveDataFeedTask;
 import com.knowhouse.thereceiptbook.Constants;
 import com.knowhouse.thereceiptbook.FragmentActivities.MainActivityFragment;
 import com.knowhouse.thereceiptbook.R;
@@ -29,89 +33,29 @@ import java.util.Map;
 
 public class DataClass{
 
-    private String phoneNumber;
-    private String date;
     private Context context;
     private NestedScrollView view;
 
     //Function to feed data to the data feed layout through the
     public DataClass(String phoneNumber, String date, NestedScrollView view,Context context){
-        this.phoneNumber = phoneNumber;
-        this.date = date;
         this.context = context;
         this.view = view;
-        retrieveDataFeed();
+
+        if(isNetworkAvailable()){
+            SaveDataFeedTask saveAndPopulate = new SaveDataFeedTask(view,context,phoneNumber,date);
+            saveAndPopulate.retrieveDataFeed();
+        }else{
+            GetDataFeedTask getDataFeed = new GetDataFeedTask();
+            getDataFeed.execute(view,context,date);
+        }
     }
 
-
-    private void populateCardView(String issuerCompanyName,String noOfReceiptIssuedPerDay,
-            String totalOfItemsSoldPerDay,String totalAmountMadePerDay, String itemWithHighestReceiptNumberPerDay){
-        TextView user_company = view.findViewById(R.id.issuer_company_name);
-        TextView number_of_receipt = view.findViewById(R.id.tNumberOfReceipt);
-        TextView total_amount_made = view.findViewById(R.id.totalAmountMade);
-        TextView highestReceiptIssuedItem = view.findViewById(R.id.highest_receipt_issued_item);
-        TextView totalItemSold = view.findViewById(R.id.numberOfItemsSold);
-
-        user_company.setText(context.getString(R.string.company_giant_inc,issuerCompanyName));
-        number_of_receipt.setText(context.getString(R.string.total_number_of_receipt_issued_,noOfReceiptIssuedPerDay));
-        total_amount_made.setText(context.getString(R.string.total_amount_made,totalAmountMadePerDay));
-        highestReceiptIssuedItem.setText(context.getString(R.string.item_with_most_receipt,itemWithHighestReceiptNumberPerDay));
-        totalItemSold.setText(context.getString(R.string.total_number_of_items_sold,totalOfItemsSoldPerDay));
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void retrieveDataFeed(){
-
-        final RequestQueue requestQueue = MySingleton.getInstance(context)
-                .getRequestQueue();
-        requestQueue.start();   //start the request queue
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.URL_GET_DATE_FEED,
-                response -> {
-                    try {
-                        JSONArray obj = new JSONArray(response);  //JSon object to get object information from database
-                        JSONObject[] object  = new JSONObject[obj.length()];
-                        for(int i = 0; i<obj.length();i++)
-                        {
-                            object[i] = obj.getJSONObject(i);
-                            if (!object[i].getBoolean("error")) {   //if for json object error in database, this message will be retrieved
-                                String issuerCompanyName = object[i].getString("issuerCompany");   //variable to hold the issuer of receipts company name
-                                String noOfReceiptIssuedPerDay = String.valueOf(object[i].getInt("noReceiptIssued"));   //variable to hold the number of receipts issued in a day
-                                String totalOfItemsSoldPerDay = String.valueOf(object[i].getInt("totalItemsSold"));    //variable to hold the number of items sold in a day
-
-                                Locale locale = new Locale("English","Ghana","GH");
-                                String symbols = "GHS ";
-                                DecimalFormat currency = (DecimalFormat)NumberFormat.getCurrencyInstance();
-                                DecimalFormatSymbols symbol = new DecimalFormatSymbols(locale);
-                                symbol.setCurrencySymbol(symbols);
-                                currency.setDecimalFormatSymbols(symbol);
-                                String totalAmountMadePerDay = currency.format(object[i].getInt("totalPriceOfItemsSold"));      //variable to hold the number of items gotten in a day
-
-                                String itemWithHighestReceiptNumberPerDay = object[i].getString("itemWithHighestReceipt");   //variable to hold the number of highest receipt issued item
-                                populateCardView(issuerCompanyName,noOfReceiptIssuedPerDay,totalOfItemsSoldPerDay,
-                                        totalAmountMadePerDay,itemWithHighestReceiptNumberPerDay);
-                            }else {
-                                Toast.makeText(context,"Check parameters",Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    requestQueue.stop();
-                }, error -> {
-            Toast.makeText(context,"Please check internet connection",Toast.LENGTH_LONG).show();
-            requestQueue.stop();
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String,String> params = new HashMap<>();
-                params.put("user_phone_no", phoneNumber);
-                params.put("current_date", date);
-                return params;
-            }
-        };
-        MySingleton.getInstance(context).addToRequestQueue(stringRequest);
-    }
 
 }

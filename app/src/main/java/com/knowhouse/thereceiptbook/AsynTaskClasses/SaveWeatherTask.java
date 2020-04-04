@@ -1,9 +1,7 @@
 package com.knowhouse.thereceiptbook.AsynTaskClasses;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -11,7 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import com.knowhouse.thereceiptbook.R;
 import com.knowhouse.thereceiptbook.SQLiteDatabaseClasses.TheReceiptBookDatabaseHelper;

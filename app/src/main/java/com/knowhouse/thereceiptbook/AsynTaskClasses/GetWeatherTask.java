@@ -16,8 +16,6 @@ import com.knowhouse.thereceiptbook.R;
 import com.knowhouse.thereceiptbook.SQLiteDatabaseClasses.TheReceiptBookDatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class GetWeatherTask extends AsyncTask<Object,Void,ArrayList<String>> {
 
@@ -70,7 +68,7 @@ public class GetWeatherTask extends AsyncTask<Object,Void,ArrayList<String>> {
 
     private ArrayList<String> retrieveData() {
 
-        ArrayList<String> list =  new ArrayList<>();;
+        ArrayList<String> list =  new ArrayList<>();
 
         try{
 

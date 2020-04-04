@@ -58,6 +58,8 @@ public class GetDataFeedTask extends AsyncTask<Object,Void, ArrayList<String>> {
             list.add(cursor.getString(3));   //items with most receipt
             list.add(cursor.getString(4));    //total of items sold per day
         }
+        cursor.close();
+        db.close();
 
         return list;
     }

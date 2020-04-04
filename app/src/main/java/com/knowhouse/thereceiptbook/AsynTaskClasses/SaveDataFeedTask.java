@@ -1,19 +1,14 @@
 package com.knowhouse.thereceiptbook.AsynTaskClasses;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.knowhouse.thereceiptbook.Constants;
-import com.knowhouse.thereceiptbook.R;
 import com.knowhouse.thereceiptbook.SQLiteDatabaseClasses.TheReceiptBookDatabaseHelper;
 import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 
@@ -43,20 +38,6 @@ public class SaveDataFeedTask {
         this.date = date;
     }
 
-    private void populateCardView(String issuerCompanyName,String noOfReceiptIssuedPerDay,
-                                  String totalOfItemsSoldPerDay,String totalAmountMadePerDay, String itemWithHighestReceiptNumberPerDay){
-        TextView user_company = view.findViewById(R.id.issuer_company_name);
-        TextView number_of_receipt = view.findViewById(R.id.tNumberOfReceipt);
-        TextView total_amount_made = view.findViewById(R.id.totalAmountMade);
-        TextView highestReceiptIssuedItem = view.findViewById(R.id.highest_receipt_issued_item);
-        TextView totalItemSold = view.findViewById(R.id.numberOfItemsSold);
-
-        user_company.setText(context.getString(R.string.company_giant_inc,issuerCompanyName));
-        number_of_receipt.setText(context.getString(R.string.total_number_of_receipt_issued_,noOfReceiptIssuedPerDay));
-        total_amount_made.setText(context.getString(R.string.total_amount_made,totalAmountMadePerDay));
-        highestReceiptIssuedItem.setText(context.getString(R.string.item_with_most_receipt,itemWithHighestReceiptNumberPerDay));
-        totalItemSold.setText(context.getString(R.string.total_number_of_items_sold,totalOfItemsSoldPerDay));
-    }
 
     public void retrieveDataFeed(){
 

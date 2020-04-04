@@ -4,12 +4,12 @@ package com.knowhouse.thereceiptbook.UtitlityClasses;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 
 import com.knowhouse.thereceiptbook.AsynTaskClasses.GetWeatherTask;
 import com.knowhouse.thereceiptbook.AsynTaskClasses.SaveWeatherTask;
 import com.knowhouse.thereceiptbook.R;
+
 import java.net.URL;
 import java.net.URLEncoder;
 

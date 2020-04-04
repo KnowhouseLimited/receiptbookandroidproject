@@ -22,12 +22,12 @@ public class ActivityFeedAdapter extends
     private Bitmap user_image;
     private String[] app_text;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder{
         //Define the view to be used for each data item
 
         private CardView cardView;
 
-        public ViewHolder(@NonNull CardView itemView) {
+        ViewHolder(@NonNull CardView itemView) {
             super(itemView);
             cardView = itemView;
         }
@@ -59,7 +59,7 @@ public class ActivityFeedAdapter extends
         CircleImageView user_images = cardView.findViewById(R.id.profile_image);
 
         //append 0 to the phone number
-        String phoneNumberString = "0"+ String.valueOf(userPhoneNumber);
+        String phoneNumberString = "0"+ userPhoneNumber;
         //set views
         user_fullname.setText(full_name);
         user_phone_number.setText(phoneNumberString);

@@ -45,6 +45,18 @@ public class TheReceiptBookDatabaseHelper extends SQLiteOpenHelper {
                 "entry NUMERIC," +
                 "date TEXT);");
 
+        db.execSQL("CREATE TABLE TRANSACTIONSFEED(_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "date TEXT," +
+                "application TEXT," +
+                "image TEXT," +
+                "phone_number NUMERIC," +
+                "full_name TEXT," +
+                "identity NUMERIC);");
+
+        db.execSQL("CREATE TABLE PIECHARTFEED(_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "item TEXT," +
+                "entry NUMERIC);");
+
         Log.d("Database operation","Table created ...");
     }
 
@@ -89,5 +101,24 @@ public class TheReceiptBookDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put("entry",entry);
         contentValues.put("date",date);
         db.insert("GRAPHFEED",null,contentValues);
+    }
+
+    public void insertTransactionFeed(SQLiteDatabase db, String date, String applicationText,String image,
+                                      int phoneNumber,String fullName,int identity) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("date",date);
+        contentValues.put("application",applicationText);
+        contentValues.put("image",image);
+        contentValues.put("phone_number",phoneNumber);
+        contentValues.put("full_name",fullName);
+        contentValues.put("identity",identity);
+        db.insert("TRANSACTIONSFEED",null,contentValues);
+    }
+
+    public void insertPieChartFeed(SQLiteDatabase db, String item,float entry){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("item",item);
+        contentValues.put("entry",entry);
+        db.insert("PIECHARTFEED",null,contentValues);
     }
 }

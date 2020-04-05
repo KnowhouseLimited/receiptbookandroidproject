@@ -45,11 +45,10 @@ public class GetWeatherTask extends AsyncTask<Object,Void,ArrayList<String>> {
         TextView feelsLike = view.findViewById(R.id.weatherFeelsLike);
         TextView cloud = view.findViewById(R.id.weatherCloud);
 
-        Bitmap bitmap = null;
-
         try {
             byte[] encodeByte = Base64.decode(list.get(5), Base64.DEFAULT);
-            bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            icon.setImageBitmap(bitmap);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -59,7 +58,6 @@ public class GetWeatherTask extends AsyncTask<Object,Void,ArrayList<String>> {
         humidity.setText(context.getString((R.string.humidity_57),list.get(2)));
         pressure.setText(context.getString((R.string.pressure_1015_hpa),list.get(3)));
         wind.setText(context.getString((R.string.wind_14_km_h_sse),list.get(4)));
-        icon.setImageBitmap(bitmap);
         temperature.setText(list.get(6));
         feelsLike.setText(context.getString((R.string.feels_like),list.get(7)));
         cloud.setText(list.get(8));

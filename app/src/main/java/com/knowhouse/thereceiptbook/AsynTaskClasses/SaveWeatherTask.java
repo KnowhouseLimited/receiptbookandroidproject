@@ -1,6 +1,8 @@
 package com.knowhouse.thereceiptbook.AsynTaskClasses;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.knowhouse.thereceiptbook.R;
@@ -39,11 +42,8 @@ public class SaveWeatherTask
 
 
     private Context context;
-    private ArrayList<Object> list;
     private View view;
-    private Map<String, Bitmap> bitmaps = new HashMap<>();
-    private String encodedImage;
-
+    public static Map<String, Bitmap> bitmaps = new HashMap<>();
 
 
     @Override
@@ -99,10 +99,41 @@ public class SaveWeatherTask
 
     @Override
     protected void onPostExecute(ArrayList<String> list) {
-        GetWeatherTask getWeatherTask = new GetWeatherTask();
-        getWeatherTask.execute(view,context);
+        populateView(list);
     }
 
+
+    private void populateView(ArrayList<String> list){
+        TextView date = view.findViewById(R.id.weatherDate);
+        TextView town = view.findViewById(R.id.weatherTown);
+        TextView humidity = view.findViewById(R.id.weatherHumidity);
+        TextView pressure = view.findViewById(R.id.weatherPressure);
+        TextView wind = view.findViewById(R.id.weatherWind);
+        ImageView icon = view.findViewById(R.id.weatherIcon);
+        TextView temperature = view.findViewById(R.id.weatherTemp);
+        TextView feelsLike = view.findViewById(R.id.weatherFeelsLike);
+        TextView cloud = view.findViewById(R.id.weatherCloud);
+
+        if(bitmaps.containsKey(list.get(5))){
+            icon.setImageBitmap(
+                    bitmaps.get(list.get(5)));
+        }
+        else{
+            //download and display weather condition image
+            new LoadImageTask(icon).execute(
+                    list.get(5));
+        }
+
+
+        date.setText(list.get(0));
+        town.setText(list.get(1));
+        humidity.setText(context.getString((R.string.humidity_57),list.get(2)));
+        pressure.setText(context.getString((R.string.pressure_1015_hpa),list.get(3)));
+        wind.setText(context.getString((R.string.wind_14_km_h_sse),list.get(4)));
+        temperature.setText(list.get(6));
+        feelsLike.setText(context.getString((R.string.feels_like),list.get(7)));
+        cloud.setText(list.get(8));
+    }
     /**
      * This is the method that convert the JSON objects to the various
      * primitive types
@@ -185,8 +216,9 @@ public class SaveWeatherTask
             SQLiteDatabase db = helper.getWritableDatabase();
             db.delete("WEATHER",null,null);
             helper.insertWeather(db,dateString,stringTown,humidityString,windString,
-                    encodedImage,temperatureString,feelsLikeString,cloudString,pressureString);
-
+                    null,temperatureString,feelsLikeString,cloudString,pressureString);
+        db.close();
+        helper.close();
         return stringList;
     }
 
@@ -233,7 +265,13 @@ public class SaveWeatherTask
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG,100,baos);
                     byte[] b = baos.toByteArray();
-                    encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+                    String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+                    TheReceiptBookDatabaseHelper helper = new TheReceiptBookDatabaseHelper(context);
+                    SQLiteDatabase db = helper.getWritableDatabase();
+                    ContentValues values = new ContentValues();
+                    values.put("icon", encodedImage);
+                    db.update("WEATHER",values,null,null);
                     bitmaps.put(params[0], bitmap);  //cache for later use
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -252,6 +290,7 @@ public class SaveWeatherTask
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             imageView.setImageBitmap(bitmap);
+
         }
     }
 

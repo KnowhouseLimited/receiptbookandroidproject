@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity
     private int phoneNumber;
     private String  fullName;
     private String companyName;
-    private boolean receiptSent;
     private String imageUrl;
 
     private  Bitmap image;
@@ -65,12 +64,9 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);    //Turn off the title of the action bar
 
         FloatingActionButton fab = findViewById(R.id.fab);  //capture the floating button layout
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {                    //set an onClickListener for the floating action button
-                Intent intent = new Intent(MainActivity.this,ReceiptPageActivity.class);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {                    //set an onClickListener for the floating action button
+            Intent intent = new Intent(MainActivity.this,ReceiptPageActivity.class);
+            startActivity(intent);
         });
 
 
@@ -95,10 +91,10 @@ public class MainActivity extends AppCompatActivity
         String phoneNumberString = "0".concat(String.valueOf(phoneNumber));
         companyName = intent.getExtras().getString(COMPANY_NAME).trim();
         imageUrl = intent.getExtras().getString(IMAGE_URL);
-        receiptSent = intent.getExtras().getBoolean(RECEIPTISSUED);
+        boolean receiptSent = intent.getExtras().getBoolean(RECEIPTISSUED);
 
         if(receiptSent) {
-            Fragment fragment = null;           //Fragment object to hold the fragment in fragment activities package
+            Fragment fragment;           //Fragment object to hold the fragment in fragment activities package
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();   //fragment transaction object to dynamically change fragment
             fragment = new TransactionsFragment();      //Stores a reference to transaction fragment object in fragment variable
             ft.replace(R.id.content_frame, fragment);    //replace the currently used fragment with home fragment
@@ -165,7 +161,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         int id = menuItem.getItemId();      //integer to hold value for the selected item in the menu
-        Fragment fragment = null;           //Fragment object to hold the fragment in fragment activities package
+        Fragment fragment;           //Fragment object to hold the fragment in fragment activities package
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();   //fragment transaction object to dynamically change fragment
         Intent intent = null;   //intent to launch help activity and feedback activity
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/data_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="0dp"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/splash_back_color"
+    app:contentPadding="10dp">
+
+
+    <LinearLayout
+        android:id="@+id/parentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/issuer_company_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/company_giant_inc" />
+
+        <TextView
+            android:id="@+id/tNumberOfReceipt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/total_number_of_receipt_issued_" />
+
+        <TextView
+            android:id="@+id/numberOfItemsSold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/total_number_of_items_sold" />
+
+        <TextView
+            android:id="@+id/totalAmountMade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/total_amount_made" />
+
+        <TextView
+            android:id="@+id/highest_receipt_issued_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/item_with_most_receipt" />
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

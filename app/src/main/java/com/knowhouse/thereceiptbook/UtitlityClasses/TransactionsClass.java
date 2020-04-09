@@ -1,4 +1,4 @@
-package com.knowhouse.thereceiptbook;
+package com.knowhouse.thereceiptbook.UtitlityClasses;
 
 import android.graphics.Bitmap;
 

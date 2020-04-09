@@ -6,13 +6,16 @@
 package com.knowhouse.thereceiptbook.FragmentActivities;
 
 
-import android.support.v4.app.Fragment;
+
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
+
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
 
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.knowhouse.thereceiptbook.R;
@@ -28,7 +31,7 @@ import java.util.Date;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment{
+public class MainActivityFragment extends Fragment {
 
 
     @Override

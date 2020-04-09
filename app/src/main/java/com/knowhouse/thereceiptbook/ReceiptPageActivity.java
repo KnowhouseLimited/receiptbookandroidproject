@@ -2,17 +2,14 @@ package com.knowhouse.thereceiptbook;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -20,12 +17,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.material.textfield.TextInputEditText;
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +38,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
     private TextInputEditText amountPaid;
     private ProgressDialog progressDialog;
     private boolean isSent;
+    public static ArrayList<String> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,12 @@ public class ReceiptPageActivity extends AppCompatActivity {
         final String item_purchased = itemPurchased.getText().toString().trim();
         final String customer_phone_number = customerPhoneNumber.getText().toString().trim();
         final String amount_paid = amountPaid.getText().toString().trim();
+
+        list = new ArrayList<>();
+        list.add(customer_name);
+        list.add(item_purchased);
+        list.add(customer_phone_number);
+        list.add(amount_paid);
 
         final int id = SharedPrefManager.getInstance(getApplicationContext()).getUserID();
         final int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();

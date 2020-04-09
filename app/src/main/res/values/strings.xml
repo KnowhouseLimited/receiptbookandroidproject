@@ -53,4 +53,14 @@
     <string name="total_amount_made"><b>Total Amount Made :</b> %s</string>
     <string name="item_with_most_receipt"><b>Item With Most Receipt :</b> %s</string>
     <string name="image_of_the_cloud">image of the cloud</string>
+    <string name="Enter_PhoneNumber_info">KnowHouse will send an SMS message to verify our phone number</string>
+    <string name="title_activity_login2">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>

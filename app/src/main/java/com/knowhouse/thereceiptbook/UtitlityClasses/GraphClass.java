@@ -3,7 +3,9 @@ package com.knowhouse.thereceiptbook.UtitlityClasses;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.widget.NestedScrollView;
+
+
+import androidx.core.widget.NestedScrollView;
 
 import com.knowhouse.thereceiptbook.AsynTaskClasses.GetGraphDataTask;
 import com.knowhouse.thereceiptbook.AsynTaskClasses.SaveGraphTask;

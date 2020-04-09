@@ -17,7 +17,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <android.support.design.widget.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/full_name"
         android:layout_width="match_parent"
         android:layout_marginTop="30dp"
@@ -31,7 +31,7 @@
         android:background="@drawable/rounded_edittext"
         />
 
-    <android.support.design.widget.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/company_name"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
@@ -44,7 +44,7 @@
         android:maxLength="10"
         android:background="@drawable/rounded_edittext" />
 
-    <android.support.design.widget.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/phone_number"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
@@ -58,7 +58,7 @@
         android:background="@drawable/rounded_edittext" />
 
 
-    <android.support.design.widget.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
@@ -72,7 +72,7 @@
         android:background="@drawable/rounded_edittext"
         />
 
-    <android.support.design.widget.TextInputEditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/confirm_password"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"

@@ -24,7 +24,7 @@
         android:layout_below="@id/profileImageSetup"
         android:layout_marginTop="16dp">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/full_name_edittext"
             android:layout_height="wrap_content"
             android:layout_row="0"
@@ -40,7 +40,7 @@
             android:padding="10dp"
             android:enabled="false"/>
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_phone_number_edittext"
             android:layout_height="wrap_content"
             android:layout_row="1"
@@ -57,7 +57,7 @@
             android:padding="10dp"
             android:enabled="false"/>
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/company_name_edittext"
             android:layout_height="wrap_content"
             android:layout_row="2"

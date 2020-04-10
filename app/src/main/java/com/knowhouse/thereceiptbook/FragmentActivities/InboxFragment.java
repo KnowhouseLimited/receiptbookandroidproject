@@ -16,6 +16,8 @@ public class InboxFragment extends Fragment {
 
 
     public InboxFragment() {
+
+
         // Required empty public constructor
     }
 

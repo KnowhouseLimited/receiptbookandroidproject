@@ -2,7 +2,7 @@ package com.knowhouse.thereceiptbook;
 
 public class Constants {
 
-    private static final String ROOT_URL = "http://192.168.43.110/thereceiptbook/";
+    private static final String ROOT_URL = "http://myknowhouse.com/thereceiptbook/";
 
     public static final String URL_LOGIN = ROOT_URL+"UserLogin.php";
     public static final String URL_REGISTER = ROOT_URL+"registerUser.php";

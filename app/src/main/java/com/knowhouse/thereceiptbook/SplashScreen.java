@@ -21,7 +21,7 @@ import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 
 
 public class SplashScreen extends AppCompatActivity {
-    private static boolean isOffline;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +61,35 @@ public class SplashScreen extends AppCompatActivity {
                             finish();   //remove the splash screen from stack
                             requestQueue.stop();
                         }
-                           isOffline = false;
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast toast = Toast.makeText(getApplicationContext(),"User is offline",Toast.LENGTH_LONG);
                 toast.show();
-                requestQueue.stop();
-                isOffline = true;
+                if(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn()){
+                    Intent intent =new Intent(getApplicationContext(),MainActivity.class);
 
-                //TODO: Run sqlite database
+                    int id = SharedPrefManager.getInstance(getApplicationContext()).getUserID();
+                    int phoneNumber = SharedPrefManager.getInstance(getApplicationContext()).getUserPhoneNumber();
+                    String fullName = SharedPrefManager.getInstance(getApplicationContext()).getUserFullName();
+                    String companyName = SharedPrefManager.getInstance(getApplicationContext()).getUserCompany();
+                    String image = SharedPrefManager.getInstance(getApplicationContext()).getUserImage();
+
+                    intent.putExtra(MainActivity.USERID,id);
+                    intent.putExtra(MainActivity.PHONE_NUMBER,phoneNumber);
+                    intent.putExtra(MainActivity.FULL_NAME,fullName);
+                    intent.putExtra(MainActivity.COMPANY_NAME,companyName);
+                    intent.putExtra(MainActivity.IMAGE_URL,image);
+
+                    startActivity(intent);  //Start intent to launch MainActivity
+                    finish();   //remove the splash screen from stack
+                    requestQueue.stop();
+                }else{
+                    startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                    finish();   //remove the splash screen from stack
+                    requestQueue.stop();
+                }
             }
         });
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(

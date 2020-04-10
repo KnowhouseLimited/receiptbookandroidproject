@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ececec"
+    android:background="@drawable/gradient_background"
     tools:context=".LoginActivity">
 
     <TextView
@@ -63,7 +62,7 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_button"
         android:text="@string/sign_in"
-        android:textColor="@color/splash_back_color"
+        android:textColor="@color/colorPrimaryDark"
         android:maxLength="30"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 

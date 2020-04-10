@@ -32,10 +32,25 @@
     <string name="customer_phone_number">Customer\'s Phone Number</string>
     <string name="purchased_items">Purchase Item</string>
     <string name="amount_ghs">Amount</string>
-    <string name="issue">Issue</string>
+    <string name="issue">ISSUE</string>
     <string name="issue_receipt">Issue Receipt</string>
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="time">Time</string>
     <string name="dummy_text">Name Surname Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</string>
+    <string name="api_key">fd68e6c4a32df597c96a54f9306375b1</string>
+    <string name="web_service_url">http://api.openweathermap.org/data/2.5/weather/?q=</string>
+    <string name="read_error">Unable to read weather data</string>
+    <string name="connect_error">Unable to connect to OpenWeatherMap.org</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="humidity_57">Humidity: %s</string>
+    <string name="pressure_1015_hpa">Pressure: %s hPa</string>
+    <string name="wind_14_km_h_sse">Wind: %s km/h SSE</string>
+    <string name="feels_like">Feels Like : %s</string>
+    <string name="company_giant_inc"><b>Company :</b> %s</string>
+    <string name="total_number_of_receipt_issued_"><b>Total Number Of Receipt Issued :</b> %s</string>
+    <string name="total_number_of_items_sold"><b>Total Number Of Items Sold :</b> %s</string>
+    <string name="total_amount_made"><b>Total Amount Made :</b> %s</string>
+    <string name="item_with_most_receipt"><b>Item With Most Receipt :</b> %s</string>
+    <string name="image_of_the_cloud">image of the cloud</string>
 </resources>

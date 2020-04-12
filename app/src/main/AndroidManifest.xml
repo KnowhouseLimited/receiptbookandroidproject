@@ -46,7 +46,6 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.knowhouse.thereceiptbook.MainPageActivity" />
         <activity android:name="com.knowhouse.thereceiptbook.FindUserActivity" />
         <activity android:name="com.knowhouse.thereceiptbook.ChatActivity" />
     </application>

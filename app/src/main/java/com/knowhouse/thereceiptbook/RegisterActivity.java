@@ -2,12 +2,13 @@ package com.knowhouse.thereceiptbook;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
@@ -16,7 +17,22 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.knowhouse.thereceiptbook.VerficationDialogFragments.VerificationDialogFragment;
 import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 
 import org.json.JSONException;
@@ -24,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -34,12 +51,21 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText userPassword; //TextInput edit for user password variable
     private TextInputEditText confirmUserPassword;  //TextInput edit for confirm password variable
     private ProgressDialog progressDialog;  //Progress dialog variable
+
     private final String result = "Already Registered"; //To display if user is already available
+    private String mCountryCode = "233";
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    private boolean verifyClick;
+    private boolean opt;
+    private String mVerificationId;
+    private String mCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        final FirebaseApp firebaseApp = FirebaseApp.initializeApp(getApplicationContext());
 
         //Initialize the various fields
         fullName = findViewById(R.id.full_name);    //reference to full name
@@ -50,6 +76,38 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);  //reference to progress dialog
         signUp = findViewById(R.id.sign_up_button); //reference to sign up
 
+
+        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                signInWithPhoneAuthCredential(phoneAuthCredential);
+            }
+
+
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                Toast.makeText(RegisterActivity.this,"can not create an account"+e.getMessage(),Toast.LENGTH_LONG).show();
+                verifyClick = false;
+            }
+
+
+
+
+            @Override
+            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(verificationId, forceResendingToken);
+
+                mVerificationId = verificationId;
+
+                progressDialog.setMessage("Verify Code");
+                verifyClick = true ;
+
+
+            }
+        };
+
+
         //Create an onClick Listener for button
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +115,9 @@ public class RegisterActivity extends AppCompatActivity {
                 if(userPassword.getText().toString().trim()
                         .equals(confirmUserPassword.getText().
                                 toString().trim())){
-                    createUser();
+                    if(isAuthenticated()){
+                        createUser();
+                    }
                 }else{
                     Toast.makeText(RegisterActivity.this, "Passwords don't match",  //Text to display if passwords
                             Toast.LENGTH_SHORT).show();                                         //don't match.
@@ -90,10 +150,11 @@ public class RegisterActivity extends AppCompatActivity {
                         progressDialog.dismiss();   //dismiss the progress dialog from the screen
                         try{
                             JSONObject object = new JSONObject(response);   //get the objects using the JSON object from database
-                            if(!object.getBoolean("error")){            //if the response for error is false the code below will run
-                                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);  //Create an intent to launch the login activity class
-                                startActivity(intent);  //start the login activity class
-                                finish();       //remove register activity from stack
+                            if(!object.getBoolean("error")){//if the response for error is false the code below will run
+                                    //startActivity(new Intent(getApplicationContext(), MainPageActivity.class));
+                                    Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);  //Create an intent to launch the login activity class
+                                    startActivity(intent);  //start the login activity class
+                                    finish();       //remove register activity from stack
                             }else{  //if response for error is true then the code below will run
                                 Toast.makeText(getApplicationContext(),
                                         "Please Check Your Credentials",Toast.LENGTH_LONG).show();  //this message will display to the user
@@ -125,4 +186,128 @@ public class RegisterActivity extends AppCompatActivity {
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);  //add the request queue to the instance MySingleton's request queue
     }
+
+    public boolean isAuthenticated(){
+
+
+        //userIsLoggedIn();
+        if (!phoneNumber.getText().toString().isEmpty() && phoneNumber.getText().toString().length() == 10 ||
+                !phoneNumber.getText().toString().isEmpty() && phoneNumber.getText().toString().length() == 9 )  {
+
+            String phoneNum = "+"+ mCountryCode+phoneNumber.getText().toString();
+            Log.d("TAG","onCLick: Phone number is "+phoneNum);
+
+
+           /* if (!verifyClick){
+                if(!opt) {
+                    progressDialog.setMessage("Sending OTP ...");
+                    progressDialog.show();
+                }else{
+                    progressDialog.setMessage("Verifying code ...");
+                    progressDialog.show();
+                }
+            }*/
+
+
+            if(verifyClick && mCode.isEmpty() )
+
+            {
+                progressDialog.dismiss();
+                //mCode.setError("Field is Empty");
+                Toast.makeText(getApplicationContext(),"Field is Empty",Toast.LENGTH_LONG).show();
+                progressDialog.setMessage("Verify Code");
+                progressDialog.show();
+
+                //mSend.setText("Verify Code");
+            }
+            else if(verifyClick && mCode.length() != 6){
+                //mCode.setError("Enter Valid Code");
+                Toast.makeText(getApplicationContext(),"Enter valid code",Toast.LENGTH_LONG).show();
+                opt = true ;
+            }
+            else {
+                if (mVerificationId != null)
+                    verifyPhoneNumberWithCode();
+
+                else
+                    startPhoneNumberVerification(phoneNum);
+            }
+        }
+        else{
+            phoneNumber.setError("Phone number is not valid");
+
+        }
+
+        return true;
+    }
+
+    private void verifyPhoneNumberWithCode(){
+        VerificationDialogFragment verifyDialog = new VerificationDialogFragment();
+        verifyDialog.show(getSupportFragmentManager(),"Verification Dialog");
+        mCode = VerificationDialogFragment.verifiedCode;
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, mCode);
+        signInWithPhoneAuthCredential(credential);
+    }
+
+
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) {
+        FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if(user != null){
+                        final DatabaseReference mUserDB = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
+                        mUserDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(!dataSnapshot.exists()){
+                                    Map<String, Object> userMap = new HashMap<>();
+                                    userMap.put("phone", user.getPhoneNumber());
+                                    userMap.put("name", user.getPhoneNumber());
+                                    mUserDB.updateChildren(userMap);
+                                }
+                                //userIsLoggedIn();
+                            }
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError)
+                            {
+
+                            }
+                        });
+                    }
+
+                }
+
+            }
+        });
+    }
+
+
+   /* private void userIsLoggedIn() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            //startActivity(new Intent(getApplicationContext(), MainPageActivity.class));
+            finish();
+        }
+    }*/
+
+    private void startPhoneNumberVerification(String phoneNum) {
+
+
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNum,
+                60L,
+                TimeUnit.SECONDS,
+                this,
+                mCallbacks);
+
+
+    }
+
 }

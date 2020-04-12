@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.knowhouse.thereceiptbook.FragmentActivities.InboxFragment;
 import com.knowhouse.thereceiptbook.User.UserListAdapter;
 import com.knowhouse.thereceiptbook.User.UserObject;
 import com.knowhouse.thereceiptbook.Utils.CountryToPhonePrefix;
@@ -76,7 +77,7 @@ public class FindUserActivity extends AppCompatActivity {
         if(validChat){
             chatInfoDb.updateChildren(newChatMap);
             userDb.child(FirebaseAuth.getInstance().getUid()).child("chat").child(key).setValue(true);
-            startActivity(new Intent(getApplicationContext(), MainPageActivity.class));
+            startActivity(new Intent(getApplicationContext(), InboxFragment.class));
             finish();
 
         }

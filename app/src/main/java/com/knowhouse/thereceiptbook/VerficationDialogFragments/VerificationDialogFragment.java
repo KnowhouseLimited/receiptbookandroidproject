@@ -3,8 +3,10 @@ package com.knowhouse.thereceiptbook.VerficationDialogFragments;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,36 +19,62 @@ import com.knowhouse.thereceiptbook.R;
 
 import java.util.Objects;
 
-public class VerificationDialogFragment extends DialogFragment {
+public class VerificationDialogFragment extends DialogFragment{
 
-    private TextInputEditText verificationInput;
-    private Button verifiedButton;
-    public static String verifiedCode;
+    private EditText verificationInput;
+
+    public VerificationDialogFragment() {
+    }
+
+    public interface VerificationDialogListener{
+        void onFinishedVerificationDialog(String inputText);
+    }
 
 
+    public static VerificationDialogFragment newInstance (String title){
+        VerificationDialogFragment fragment = new VerificationDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("title",title);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         //Create dialog
         AlertDialog.Builder builder =
-                new AlertDialog.Builder(requireActivity());
-        View verificationDialogView = requireActivity().getLayoutInflater().inflate(
+                new AlertDialog.Builder(getActivity());
+        View verificationDialogView = getActivity().getLayoutInflater().inflate(
                 R.layout.fragment_verification,null);
 
         builder.setView(verificationDialogView);
         builder.setTitle(R.string.verfication_dialog_title);
 
-        verificationInput = getActivity().findViewById(R.id.verification_edit_text);
-        verifiedButton = getActivity().findViewById(R.id.verified_button);
+        verificationInput = verificationDialogView.findViewById(R.id.verification_edit_text);
 
         //add the verified button
-        builder.setPositiveButton(R.string.verify,
+        builder.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        verifiedCode = verificationInput.getText().toString();
+                        VerificationDialogListener listener = (VerificationDialogListener) getActivity();
+                        assert listener != null;
+                        listener.onFinishedVerificationDialog(Objects.requireNonNull(verificationInput.getText()).toString());
+                        dismiss();
                     }
-                });
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(dialog != null && Objects.requireNonNull(getDialog()).isShowing()){
+                    dialog.dismiss();
+                }
+            }
+        });
 
         return builder.create();
     }
+
 }

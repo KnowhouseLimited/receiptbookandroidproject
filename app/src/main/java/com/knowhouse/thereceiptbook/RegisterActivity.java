@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -42,7 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements VerificationDialogFragment.VerificationDialogListener {
 
     private Button signUp;      //Sign up button variable
     private TextInputEditText fullName; //TextInput edit for full name variable
@@ -64,8 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        FirebaseApp.initializeApp(this);
 
-        final FirebaseApp firebaseApp = FirebaseApp.initializeApp(getApplicationContext());
 
         //Initialize the various fields
         fullName = findViewById(R.id.full_name);    //reference to full name
@@ -76,13 +77,28 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);  //reference to progress dialog
         signUp = findViewById(R.id.sign_up_button); //reference to sign up
 
+        //Create an onClick Listener for button
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(userPassword.getText().toString().trim()
+                        .equals(confirmUserPassword.getText().
+                                toString().trim())){
+                    if(isAuthenticated()){
+                        showEditDialog();
+                    }
+                }else{
+                    Toast.makeText(RegisterActivity.this, "Passwords don't match",  //Text to display if passwords
+                            Toast.LENGTH_SHORT).show();                                         //don't match.
+                }
+            }
+        });
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                 signInWithPhoneAuthCredential(phoneAuthCredential);
             }
-
 
 
             @Override
@@ -92,38 +108,18 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
 
-
-
             @Override
             public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
-
                 mVerificationId = verificationId;
-
                 progressDialog.setMessage("Verify Code");
-                verifyClick = true ;
-
-
             }
         };
 
-
-        //Create an onClick Listener for button
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(userPassword.getText().toString().trim()
-                        .equals(confirmUserPassword.getText().
-                                toString().trim())){
-                    if(isAuthenticated()){
-                        createUser();
-                    }
-                }else{
-                    Toast.makeText(RegisterActivity.this, "Passwords don't match",  //Text to display if passwords
-                            Toast.LENGTH_SHORT).show();                                         //don't match.
-                }
-            }
-        });
+        if (mVerificationId != null){
+            verifyPhoneNumberWithCode();
+            createUser();
+        }
     }
 
 
@@ -192,59 +188,21 @@ public class RegisterActivity extends AppCompatActivity {
 
         //userIsLoggedIn();
         if (!phoneNumber.getText().toString().isEmpty() && phoneNumber.getText().toString().length() == 10 ||
-                !phoneNumber.getText().toString().isEmpty() && phoneNumber.getText().toString().length() == 9 )  {
+                !phoneNumber.getText().toString().isEmpty() && phoneNumber.getText().toString().length() == 9 ) {
 
-            String phoneNum = "+"+ mCountryCode+phoneNumber.getText().toString();
-            Log.d("TAG","onCLick: Phone number is "+phoneNum);
+            String phoneNum = "+" + mCountryCode + phoneNumber.getText().toString();
+            Log.d("TAG", "onCLick: Phone number is " + phoneNum);
 
+            return startPhoneNumberVerification(phoneNum);
 
-           /* if (!verifyClick){
-                if(!opt) {
-                    progressDialog.setMessage("Sending OTP ...");
-                    progressDialog.show();
-                }else{
-                    progressDialog.setMessage("Verifying code ...");
-                    progressDialog.show();
-                }
-            }*/
-
-
-            if(verifyClick && mCode.isEmpty() )
-
-            {
-                progressDialog.dismiss();
-                //mCode.setError("Field is Empty");
-                Toast.makeText(getApplicationContext(),"Field is Empty",Toast.LENGTH_LONG).show();
-                progressDialog.setMessage("Verify Code");
-                progressDialog.show();
-
-                //mSend.setText("Verify Code");
-            }
-            else if(verifyClick && mCode.length() != 6){
-                //mCode.setError("Enter Valid Code");
-                Toast.makeText(getApplicationContext(),"Enter valid code",Toast.LENGTH_LONG).show();
-                opt = true ;
-            }
-            else {
-                if (mVerificationId != null)
-                    verifyPhoneNumberWithCode();
-
-                else
-                    startPhoneNumberVerification(phoneNum);
-            }
         }
         else{
             phoneNumber.setError("Phone number is not valid");
-
         }
-
-        return true;
+        return false;
     }
 
     private void verifyPhoneNumberWithCode(){
-        VerificationDialogFragment verifyDialog = new VerificationDialogFragment();
-        verifyDialog.show(getSupportFragmentManager(),"Verification Dialog");
-        mCode = VerificationDialogFragment.verifiedCode;
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, mCode);
         signInWithPhoneAuthCredential(credential);
     }
@@ -297,7 +255,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }*/
 
-    private void startPhoneNumberVerification(String phoneNum) {
+    private boolean startPhoneNumberVerification(String phoneNum) {
 
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
@@ -307,7 +265,18 @@ public class RegisterActivity extends AppCompatActivity {
                 this,
                 mCallbacks);
 
+        return true;
 
     }
 
+    private void showEditDialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        VerificationDialogFragment verificationDialogFragment = VerificationDialogFragment.newInstance("Verification Dialog");
+        verificationDialogFragment.show(fm,"fragment_verification");
+    }
+
+    @Override
+    public void onFinishedVerificationDialog(String inputText) {
+        mCode = inputText;
+    }
 }

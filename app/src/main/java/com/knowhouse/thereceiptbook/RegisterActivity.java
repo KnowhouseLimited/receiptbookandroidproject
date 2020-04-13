@@ -1,3 +1,7 @@
+/*
+ * Created on: 13th April, 2020
+ */
+
 package com.knowhouse.thereceiptbook;
 
 import android.app.ProgressDialog;
@@ -278,5 +282,17 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
     @Override
     public void onFinishedVerificationDialog(String inputText) {
         mCode = inputText;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i("OnStart","This starts the activity");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("OnPause","This pause the activity");
     }
 }

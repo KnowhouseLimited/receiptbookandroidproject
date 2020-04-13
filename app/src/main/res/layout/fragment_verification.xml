@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    style="@style/AppAlertTheme"
     android:id="@+id/issue_registry">
 
 
@@ -22,4 +21,4 @@
                 android:maxLength="30"
                 android:background="@drawable/rounded_edittext"/>
 
-        </RelativeLayout>
+</RelativeLayout>

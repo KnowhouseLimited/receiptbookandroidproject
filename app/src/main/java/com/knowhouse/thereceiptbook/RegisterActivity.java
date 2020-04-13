@@ -120,10 +120,6 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
             }
         };
 
-        if (mVerificationId != null){
-            verifyPhoneNumberWithCode();
-            createUser();
-        }
     }
 
 
@@ -282,6 +278,10 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
     @Override
     public void onFinishedVerificationDialog(String inputText) {
         mCode = inputText;
+        if (mVerificationId != null){
+            verifyPhoneNumberWithCode();
+            createUser();
+        }
     }
 
     @Override

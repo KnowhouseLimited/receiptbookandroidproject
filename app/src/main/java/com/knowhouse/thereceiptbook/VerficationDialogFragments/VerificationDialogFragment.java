@@ -55,26 +55,22 @@ public class VerificationDialogFragment extends DialogFragment{
 
         //add the verified button
         builder.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        VerificationDialogListener listener = (VerificationDialogListener) getActivity();
-                        assert listener != null;
-                        listener.onFinishedVerificationDialog(Objects.requireNonNull(verificationInput.getText()).toString());
-                        dismiss();
-                    }
-        });
+                (dialog, which) -> {
+                    VerificationDialogListener listener = (VerificationDialogListener) getActivity();
+                    assert listener != null;
+                    listener.onFinishedVerificationDialog(Objects.requireNonNull(verificationInput.getText()).toString());
+                    dismiss();
+                });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(dialog != null && Objects.requireNonNull(getDialog()).isShowing()){
-                    dialog.dismiss();
-                }
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            if(dialog != null && Objects.requireNonNull(getDialog()).isShowing()){
+                dialog.dismiss();
             }
         });
 
-        return builder.create();
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        return dialog;
     }
 
 }

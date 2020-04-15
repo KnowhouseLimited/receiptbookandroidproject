@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.login_button);  //get a reference to the login button layout
 
         //set an on click listener for the login button
-        loginButton.setOnClickListener(v -> startPhoneNumberVerification(phoneNumber.getText().toString()));
+        loginButton.setOnClickListener(v -> startPhoneNumberVerification(Objects.requireNonNull(phoneNumber.getText()).toString()));
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -89,8 +89,8 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Loggin In User ..."); //progress dialog message to display after click login button
         progressDialog.show();  //display progress dialog to user
 
-        final String userPhoneNumber = phoneNumber.getText().toString().trim(); //get the phoneNumber and remove spaces before/after it
-        final String userPassword = password.getText().toString().trim();   //get the password and remove spaces before/after it
+        final String userPhoneNumber = Objects.requireNonNull(phoneNumber.getText()).toString().trim(); //get the phoneNumber and remove spaces before/after it
+        final String userPassword = Objects.requireNonNull(password.getText()).toString().trim();   //get the password and remove spaces before/after it
 
 
         /*Creating a string request for the database queries*/

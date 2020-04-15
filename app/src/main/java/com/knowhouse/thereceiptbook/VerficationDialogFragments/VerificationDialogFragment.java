@@ -44,8 +44,8 @@ public class VerificationDialogFragment extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         //Create dialog
         AlertDialog.Builder builder =
-                new AlertDialog.Builder(getActivity(),R.style.AppDialogTheme);
-        View verificationDialogView = getActivity().getLayoutInflater().inflate(
+                new AlertDialog.Builder(requireActivity(),R.style.AppDialogTheme);
+        View verificationDialogView = requireActivity().getLayoutInflater().inflate(
                 R.layout.fragment_verification,null);
 
         builder.setView(verificationDialogView);

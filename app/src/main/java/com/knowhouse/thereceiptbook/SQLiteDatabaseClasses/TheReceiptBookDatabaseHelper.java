@@ -57,6 +57,14 @@ public class TheReceiptBookDatabaseHelper extends SQLiteOpenHelper {
                 "item TEXT," +
                 "entry NUMERIC);");
 
+        db.execSQL("CREATE TABLE INBOXFEED(_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "date TEXT," +
+                "application TEXT," +
+                "image TEXT," +
+                "phone_number NUMERIC," +
+                "full_name TEXT," +
+                "identity NUMERIC);");
+
         Log.d("Database operation","Table created ...");
     }
 
@@ -104,6 +112,19 @@ public class TheReceiptBookDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void insertTransactionFeed(SQLiteDatabase db, String date, String applicationText,String image,
+                                      int phoneNumber,String fullName,int identity) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("date",date);
+        contentValues.put("application",applicationText);
+        contentValues.put("image",image);
+        contentValues.put("phone_number",phoneNumber);
+        contentValues.put("full_name",fullName);
+        contentValues.put("identity",identity);
+        db.insert("TRANSACTIONSFEED",null,contentValues);
+    }
+
+
+    public void insertInboxFeed(SQLiteDatabase db, String date, String applicationText,String image,
                                       int phoneNumber,String fullName,int identity) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("date",date);

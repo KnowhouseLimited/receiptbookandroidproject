@@ -1,13 +1,17 @@
 package com.knowhouse.thereceiptbook.FragmentActivities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.knowhouse.thereceiptbook.AsynTaskClasses.GetInboxTask;
+import com.knowhouse.thereceiptbook.AsynTaskClasses.GetTransactionTask;
+import com.knowhouse.thereceiptbook.AsynTaskClasses.SaveInboxTask;
+import com.knowhouse.thereceiptbook.AsynTaskClasses.SaveTransactionTask;
 import com.knowhouse.thereceiptbook.R;
 import com.onesignal.OneSignal;
 import com.knowhouse.thereceiptbook.Chat.ChatListAdapter;
@@ -60,43 +68,24 @@ public class InboxFragment extends Fragment {
 
         Fresco.initialize(getContext());
 
+        if(isNetworkAvailable()){
+            SaveInboxTask saveInboxTask = new SaveInboxTask();
+            saveInboxTask.loadUserChatList();
+        }else{
+            //GetInboxTask getInboxTask = new GetInboxTask();
+            //getInboxTask.execute(getContext(),getActivity(),recyclerView);
 
-        getPermissions();
-        initializeRecyclerView();
-        getUserChatList();
+        }
+        //return recyclerView;
 
+
+        //getPermissions();
+        //initializeRecyclerView(recyclerView);
 
         return  recyclerView;
     }
 
-    private void getUserChatList(){
-        DatabaseReference mUserChatDB = FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).child("chat");
 
-        mUserChatDB.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               if(dataSnapshot.exists()){
-                   for (DataSnapshot childSnapshot : dataSnapshot.getChildren()){
-                       ChatObject mChat = new ChatObject(childSnapshot.getKey());
-                       boolean  exists = false;
-                       for (ChatObject mChatIterator : chatList){
-                           if (mChatIterator.getChatId().equals(mChat.getChatId()))
-                               exists = true;
-                       }
-                       if (exists)
-                           continue;
-                       chatList.add(mChat);
-                       getChatData(mChat.getChatId());
-                   }
-               }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void getChatData(String chatId) {
         DatabaseReference mChatDB = FirebaseDatabase.getInstance().getReference().child("chat").child(chatId).child("info");
@@ -156,9 +145,9 @@ public class InboxFragment extends Fragment {
         });
     }
 
-    private void initializeRecyclerView() {
+    private void initializeRecyclerView(RecyclerView mChatList) {
         chatList = new ArrayList<>();
-        mChatList= recyclerView.findViewById(R.id.chatList);
+        //mChatList= recyclerView.findViewById(R.id.chatList);
         mChatList.setNestedScrollingEnabled(false);
         mChatList.setHasFixedSize(false);
         mChatListLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
@@ -171,6 +160,13 @@ public class InboxFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS}, 1);
         }
+    }
+
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE); //TODO: Check requireNonNull
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
 }

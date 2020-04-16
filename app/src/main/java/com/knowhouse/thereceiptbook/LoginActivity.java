@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.login_button);  //get a reference to the login button layout
 
         //set an on click listener for the login button
-        loginButton.setOnClickListener(v -> startPhoneNumberVerification(Objects.requireNonNull(phoneNumber.getText()).toString()));
+        loginButton.setOnClickListener(v -> startPhoneNumberVerification(phoneNumber.getText().toString()));
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override

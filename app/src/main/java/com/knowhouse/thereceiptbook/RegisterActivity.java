@@ -77,7 +77,9 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
             if(Objects.requireNonNull(userPassword.getText()).toString().trim()
                     .equals(Objects.requireNonNull(confirmUserPassword.getText()).
                             toString().trim())){
-                isAuthenticated();
+                if(isAuthenticated()){
+                    showEditDialog();
+                }
             }else{
                 Toast.makeText(RegisterActivity.this, "Passwords don't match",  //Text to display if passwords
                         Toast.LENGTH_SHORT).show();                                         //don't match.
@@ -89,9 +91,7 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 //signInWithPhoneAuthCredential(phoneAuthCredential);
                 Log.i("OnVerificationCompleted","Verification is completed");
-                if(mVerificationId == null){
                     createUser();
-                }
             }
 
 
@@ -108,14 +108,10 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
                 if(mVerificationId != null){
                     mVerificationId = verificationId;
                     showEditDialog();
-                    progressDialog.setMessage("Verify Code");
+                    //progressDialog.setMessage("Verify Code");
                 }
             }
 
-            @Override
-            public void onCodeAutoRetrievalTimeOut(@NonNull String s) {
-                super.onCodeAutoRetrievalTimeOut(s);
-            }
         };
 
     }
@@ -228,9 +224,5 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
     @Override
     public void onFinishedVerificationDialog(String inputText) {
         mCode = inputText;
-        if (mVerificationId != null){
-            //verifyPhoneNumberWithCode();
-            createUser();
-        }
     }
 }

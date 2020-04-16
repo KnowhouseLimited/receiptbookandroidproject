@@ -49,7 +49,7 @@ public class TransactionsFragment extends Fragment {
 
     private boolean isNetworkAvailable(){
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE); //TODO: Check requireNonNull
+                = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE); //TODO: Check requireNonNull
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

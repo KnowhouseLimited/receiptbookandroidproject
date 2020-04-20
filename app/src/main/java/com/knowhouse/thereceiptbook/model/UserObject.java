@@ -1,4 +1,4 @@
-package com.knowhouse.thereceiptbook.User;
+package com.knowhouse.thereceiptbook.model;
 
 import java.io.Serializable;
 

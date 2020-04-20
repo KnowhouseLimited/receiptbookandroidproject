@@ -3,6 +3,7 @@ package com.knowhouse.thereceiptbook;
 import android.app.ProgressDialog;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //Declarpation of variables from the text inputs
+    //Declaration of variables from the text inputs
     private TextInputEditText phoneNumber;      //phone number field in layout
     private TextInputEditText password;         //password field in layout
     private ProgressDialog progressDialog;      //progress dialog variable declaration
@@ -112,8 +113,8 @@ public class LoginActivity extends AppCompatActivity {
                                             obj.getString("company"),   //get the company name of the user who just logged in
                                             obj.getString("image")       //get the image of the user who just logged in
                                     );
-                            Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG)
-                                    .show();
+                            //Toast.makeText(getApplicationContext(),obj.getString("message"),Toast.LENGTH_LONG)
+                                    //.show();
 
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);  //Create an intent to launch MainActivity class
 
@@ -190,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                             if(!dataSnapshot.exists()){
                                 Map<String, Object> userMap = new HashMap<>();
                                 userMap.put("phone", Objects.requireNonNull(user.getPhoneNumber()));
-                                userMap.put("name", user.getPhoneNumber());
+                                userMap.put("name",SharedPrefManager.getInstance(getApplicationContext()).getUserFullName());
                                 mUserDB.updateChildren(userMap);
                             }
                         }

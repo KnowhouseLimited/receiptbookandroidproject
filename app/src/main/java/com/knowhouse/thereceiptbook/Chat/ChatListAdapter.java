@@ -1,21 +1,18 @@
 package com.knowhouse.thereceiptbook.Chat;
 
-import android.content.Intent;
-
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.knowhouse.thereceiptbook.ChatActivity;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.knowhouse.thereceiptbook.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ChatListAdapter extends
         RecyclerView.Adapter<ChatListAdapter.ViewHolder> {

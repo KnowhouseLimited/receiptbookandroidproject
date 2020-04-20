@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.knowhouse.thereceiptbook.FragmentActivities.InboxFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.MainActivityFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.SalesFragment;
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id){
             case R.id.logging_out:
+                FirebaseAuth.getInstance().signOut();
                 SharedPrefManager.getInstance(this).logout();
                 startActivity(new Intent(this,LoginActivity.class));
                 finish();

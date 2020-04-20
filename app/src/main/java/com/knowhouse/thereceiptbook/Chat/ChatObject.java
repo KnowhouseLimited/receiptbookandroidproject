@@ -1,30 +1,35 @@
 package com.knowhouse.thereceiptbook.Chat;
 
-import com.knowhouse.thereceiptbook.User.UserObject;
+import com.knowhouse.thereceiptbook.model.UserObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ChatObject implements Serializable {
-    private String chatId;
+public class ChatObject {
+    private String key;
+    private ArrayList<UserObject> value;
 
-    private ArrayList<UserObject> userObjectArrayList = new ArrayList<>();
-
-    public ChatObject(String chatId){
-        this.chatId = chatId;
+    public ChatObject(String key,ArrayList<UserObject> value){
+        this.key = key;
+        this.value = value;
     }
 
-    public String getChatId() {
-        return chatId;
-    }
-    public ArrayList<UserObject> getUserObjectArrayList() {
-        return userObjectArrayList;
+    public ChatObject(){
+
     }
 
+    public String getKey() {
+        return key;
+    }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
 
+    public ArrayList<UserObject> getValue() {
+        return value;
+    }
 
-    public void addUserToArrayList(UserObject mUser){
-        userObjectArrayList.add(mUser);
+    public void setValue(ArrayList<UserObject> value) {
+        this.value = value;
     }
 }

@@ -74,16 +74,28 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
 
         //Create an onClick Listener for button
         signUp.setOnClickListener(v -> {
-            if(Objects.requireNonNull(userPassword.getText()).toString().trim()
-                    .equals(Objects.requireNonNull(confirmUserPassword.getText()).
-                            toString().trim())){
-                if(isAuthenticated()){
-                    showEditDialog();
+
+            //userIsLoggedIn();
+            if (!Objects.requireNonNull(phoneNumber.getText()).toString().isEmpty() && phoneNumber.getText().toString().length() == 10 ||
+                    !phoneNumber.getText().toString().isEmpty() && phoneNumber.getText().toString().length() == 9 ) {
+
+                if(Objects.requireNonNull(userPassword.getText()).toString().trim()
+                        .equals(Objects.requireNonNull(confirmUserPassword.getText()).
+                                toString().trim())){
+
+                    String phoneNum = "+" + mCountryCode + phoneNumber.getText().toString();
+                    Log.d("TAG", "onCLick: Phone number is " + phoneNum);
+                    startPhoneNumberVerification(phoneNum);
+
+                }else{
+                    Toast.makeText(RegisterActivity.this, "Passwords don't match",  //Text to display if passwords
+                            Toast.LENGTH_SHORT).show();                                         //don't match.
                 }
-            }else{
-                Toast.makeText(RegisterActivity.this, "Passwords don't match",  //Text to display if passwords
-                        Toast.LENGTH_SHORT).show();                                         //don't match.
             }
+            else{
+                phoneNumber.setError("Phone number is not valid");
+            }
+
         });
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -105,11 +117,8 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
                 Log.i("OnCodeSent","Called OnCodeSent");
-                if(mVerificationId != null){
                     mVerificationId = verificationId;
                     showEditDialog();
-                    //progressDialog.setMessage("Verify Code");
-                }
             }
 
         };
@@ -171,38 +180,9 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);  //add the request queue to the instance MySingleton's request queue
     }
 
-    public boolean isAuthenticated(){
 
 
-        //userIsLoggedIn();
-        if (!Objects.requireNonNull(phoneNumber.getText()).toString().isEmpty() && phoneNumber.getText().toString().length() == 10 ||
-                !phoneNumber.getText().toString().isEmpty() && phoneNumber.getText().toString().length() == 9 ) {
-
-            String phoneNum = "+" + mCountryCode + phoneNumber.getText().toString();
-            Log.d("TAG", "onCLick: Phone number is " + phoneNum);
-
-            return startPhoneNumberVerification(phoneNum);
-
-        }
-        else{
-            phoneNumber.setError("Phone number is not valid");
-        }
-        return false;
-    }
-
-
-
-
-
-   /* private void userIsLoggedIn() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            //startActivity(new Intent(getApplicationContext(), MainPageActivity.class));
-            finish();
-        }
-    }*/
-
-    private boolean startPhoneNumberVerification(String phoneNum) {
+    private void startPhoneNumberVerification(String phoneNum) {
 
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNum,
@@ -210,9 +190,6 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
                 TimeUnit.SECONDS,
                 this,
                 mCallbacks);
-
-        return true;
-
     }
 
     private void showEditDialog(){
@@ -225,4 +202,5 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
     public void onFinishedVerificationDialog(String inputText) {
         mCode = inputText;
     }
+
 }

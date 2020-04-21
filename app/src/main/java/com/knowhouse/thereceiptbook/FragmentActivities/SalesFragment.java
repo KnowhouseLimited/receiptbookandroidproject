@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.data.Entry;
+import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.knowhouse.thereceiptbook.R;
 import com.knowhouse.thereceiptbook.UtitlityClasses.PieChartClass;
 
@@ -32,7 +33,9 @@ public class SalesFragment extends Fragment {
         View pieChartView = inflater.inflate(R.layout.fragment_sales,
                 container, false);
 
-        new PieChartClass("0548409523",pieChartView,
+        String phoneNumber = String.valueOf(SharedPrefManager.getInstance(getContext()).getUserPhoneNumber());
+
+        new PieChartClass(phoneNumber,pieChartView,
                                                     getContext());
         return pieChartView;
     }

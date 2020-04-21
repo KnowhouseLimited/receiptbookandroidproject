@@ -18,18 +18,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.knowhouse.thereceiptbook.AsynTaskClasses.SaveInboxTask;
-import com.knowhouse.thereceiptbook.Chat.ChatObject;
 import com.knowhouse.thereceiptbook.R;
 import com.onesignal.OneSignal;
-
-import java.util.ArrayList;
 
 public class InboxFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FirebaseUser fUser;
-
-    ArrayList<ChatObject> chatList;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,7 +47,7 @@ public class InboxFragment extends Fragment {
         Fresco.initialize(requireContext());
 
         if(isNetworkAvailable()){
-            new SaveInboxTask();
+            new SaveInboxTask(getContext(),recyclerView);
         }else{
             //GetInboxTask getInboxTask = new GetInboxTask();
             //getInboxTask.execute(getContext(),getActivity(),recyclerView);

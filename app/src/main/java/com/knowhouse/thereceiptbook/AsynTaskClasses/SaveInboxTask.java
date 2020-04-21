@@ -1,8 +1,12 @@
 package com.knowhouse.thereceiptbook.AsynTaskClasses;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,7 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.knowhouse.thereceiptbook.ReceiptPageActivity;
+import com.knowhouse.thereceiptbook.Adapters.InboxFeedAdapter;
 import com.knowhouse.thereceiptbook.model.Chat;
 
 import java.util.ArrayList;
@@ -19,14 +23,15 @@ import java.util.ArrayList;
 public class SaveInboxTask {
 
     private ArrayList<Chat> mList;
+    private Context context;
 
-    public SaveInboxTask(){
-
-        loadUserChatList();
+    public SaveInboxTask(Context context,RecyclerView recyclerView){
+        this.context = context;
+        loadUserChatList(recyclerView);
     }
 
 
-    private void loadUserChatList(){
+    private void loadUserChatList(RecyclerView recyclerView){
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference mUserChatDB = FirebaseDatabase.getInstance().getReference().child("chat");
         mList = new ArrayList<>();
@@ -43,6 +48,8 @@ public class SaveInboxTask {
                         mList.add(chat);
                     }
                 }
+
+                loadRecyclerView(recyclerView);
             }
 
             @Override
@@ -50,6 +57,15 @@ public class SaveInboxTask {
 
             }
         });
+    }
+
+    private void loadRecyclerView(RecyclerView recyclerView){
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        InboxFeedAdapter inboxFeedAdapter = new InboxFeedAdapter(mList);
+        recyclerView.setAdapter(inboxFeedAdapter);
     }
 
 }

@@ -3,6 +3,7 @@ package com.knowhouse.thereceiptbook.UtitlityClasses;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
 
 
 import androidx.core.widget.NestedScrollView;
@@ -14,7 +15,7 @@ public class GraphClass{
 
     private Context context;
 
-    public GraphClass(String phoneNumber, String date, NestedScrollView view,
+    public GraphClass(String phoneNumber, String date, View view,
                       Context context){
         this.context = context;
 

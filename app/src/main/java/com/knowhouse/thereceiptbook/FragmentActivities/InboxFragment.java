@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.knowhouse.thereceiptbook.AsynTaskClasses.SaveInboxTask;
 import com.knowhouse.thereceiptbook.R;
+import com.knowhouse.thereceiptbook.Utils.SendNotification;
 import com.onesignal.OneSignal;
 
 public class InboxFragment extends Fragment {
@@ -31,20 +33,7 @@ public class InboxFragment extends Fragment {
         recyclerView =  (RecyclerView) inflater.inflate(R.layout.fragment_inbox,
                 container,false);
 
-        fUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        OneSignal.startInit(getContext()).init();
-        OneSignal.setSubscription(true);
-        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
-            @Override
-            public void idsAvailable(String userId, String registrationId) {
-                FirebaseDatabase.getInstance().getReference().child("user").child(fUser.getUid()).child("notificationKey").setValue(userId);
-            }
-        });
-        OneSignal.setInFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification);
-        // new SendNotification("testing notification","heading",null);
-
-        Fresco.initialize(requireContext());
+        //Fresco.initialize(requireContext());
 
         if(isNetworkAvailable()){
             new SaveInboxTask(getContext(),recyclerView);

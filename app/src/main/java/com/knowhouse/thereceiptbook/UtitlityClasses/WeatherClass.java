@@ -4,6 +4,8 @@ package com.knowhouse.thereceiptbook.UtitlityClasses;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
+
 import androidx.core.widget.NestedScrollView;
 
 import com.knowhouse.thereceiptbook.AsynTaskClasses.GetWeatherTask;
@@ -18,11 +20,11 @@ public class WeatherClass{
 
 
     private String city;
-    private NestedScrollView view;
+    private View view;
     private Context context;
 
     public WeatherClass(String city,
-                        NestedScrollView view, Context context) {
+                        View view, Context context) {
        this.city = city;
        this.view = view;
        this.context = context;

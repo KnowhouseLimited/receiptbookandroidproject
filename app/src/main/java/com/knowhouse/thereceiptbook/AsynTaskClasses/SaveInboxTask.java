@@ -62,6 +62,8 @@ public class SaveInboxTask {
     private void loadRecyclerView(RecyclerView recyclerView){
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         InboxFeedAdapter inboxFeedAdapter = new InboxFeedAdapter(mList);

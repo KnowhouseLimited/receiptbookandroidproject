@@ -8,14 +8,16 @@ public class LoggedInUser {
     private String name;
     private String phone;
     private String image;
+    private String notificationKey;
 
     public LoggedInUser(){
 
     }
 
-    public LoggedInUser(String phone,String name,String image) {
+    public LoggedInUser(String phone,String name,String image,String notificationKey) {
         this.phone = phone;
         this.name = name;
+        this.notificationKey = notificationKey;
     }
 
     public String getName() {
@@ -40,5 +42,13 @@ public class LoggedInUser {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getNotificationKey() {
+        return notificationKey;
+    }
+
+    public void setNotificationKey(String notificationKey) {
+        this.notificationKey = notificationKey;
     }
 }

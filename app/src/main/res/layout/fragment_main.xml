@@ -1,190 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/swiperefresh"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp"
-    android:id="@+id/main_fragment_recycler"
     tools:context=".FragmentActivities.MainActivityFragment">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:padding="10dp"
+        android:id="@+id/main_fragment_recycler">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/weather_card_view"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/weather_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardBackgroundColor="@color/splash_back_color"
+                app:contentPadding="5dp">
+
+
+                <LinearLayout
+                    android:id="@+id/parentLayout"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardBackgroundColor="@color/splash_back_color"
-                    app:contentPadding="5dp">
-
+                    android:layout_height="match_parent"
+                    android:baselineAligned="false">
 
                     <LinearLayout
-                        android:id="@+id/parentLayout"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
+                        android:id="@+id/weatherDataLeft"
+                        android:layout_width="0dp"
+                        android:layout_weight="1.5"
                         android:layout_height="match_parent"
-                        android:baselineAligned="false">
-
-                        <LinearLayout
-                            android:id="@+id/weatherDataLeft"
-                            android:layout_width="0dp"
-                            android:layout_weight="1.5"
-                            android:layout_height="match_parent"
-                            android:padding="5dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/weatherDate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:text=""
-                                android:textAppearance="?android:textAppearanceMedium"/>
-
-                            <TextView
-                                android:id="@+id/weatherTown"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:text=""
-                                android:textAppearance="?android:textAppearanceMedium"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/weatherHumidity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:text="@string/humidity_57" />
-
-                            <TextView
-                                android:id="@+id/weatherPressure"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:text="@string/pressure_1015_hpa" />
-
-                            <TextView
-                                android:id="@+id/weatherWind"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:text="@string/wind_14_km_h_sse" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/weatherDataRight"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal"
-                            android:padding="10dp">
-
-                            <ImageView
-                                android:id="@+id/weatherIcon"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
-                                android:scaleType="fitCenter"
-                                android:contentDescription="@string/image_of_the_cloud"/>
-
-                            <TextView
-                                android:id="@+id/weatherTemp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="?android:textAppearanceMedium"
-                                android:textStyle="bold"
-                                android:text=""/>
-
-                            <TextView
-                                android:id="@+id/weatherFeelsLike"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/feels_like"/>
-
-                            <TextView
-                                android:id="@+id/weatherCloud"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textStyle="bold"
-                                android:text=""/>
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/data_card_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardBackgroundColor="@color/splash_back_color"
-                    app:contentPadding="10dp">
-
-
-                    <LinearLayout
-                        android:id="@+id/parentTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:padding="5dp"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/issuer_company_name"
+                            android:id="@+id/weatherDate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:text="@string/company_giant_inc" />
+                            android:text=""
+                            android:textAppearance="?android:textAppearanceMedium"/>
 
                         <TextView
-                            android:id="@+id/tNumberOfReceipt"
+                            android:id="@+id/weatherTown"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:text="@string/total_number_of_receipt_issued_" />
+                            android:text=""
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:textStyle="bold"/>
 
                         <TextView
-                            android:id="@+id/numberOfItemsSold"
+                            android:id="@+id/weatherHumidity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:text="@string/total_number_of_items_sold" />
+                            android:text="@string/humidity_57" />
 
                         <TextView
-                            android:id="@+id/totalAmountMade"
+                            android:id="@+id/weatherPressure"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:text="@string/total_amount_made" />
+                            android:text="@string/pressure_1015_hpa" />
 
                         <TextView
-                            android:id="@+id/highest_receipt_issued_item"
+                            android:id="@+id/weatherWind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
-                            android:text="@string/item_with_most_receipt" />
+                            android:text="@string/wind_14_km_h_sse" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/weatherDataRight"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="10dp">
 
-                </androidx.cardview.widget.CardView>
+                        <ImageView
+                            android:id="@+id/weatherIcon"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="fitCenter"
+                            android:contentDescription="@string/image_of_the_cloud"/>
+
+                        <TextView
+                            android:id="@+id/weatherTemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:textAppearanceMedium"
+                            android:textStyle="bold"
+                            android:text=""/>
+
+                        <TextView
+                            android:id="@+id/weatherFeelsLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feels_like"/>
+
+                        <TextView
+                            android:id="@+id/weatherCloud"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text=""/>
+                    </LinearLayout>
+
+                </LinearLayout>
 
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/graph_card_view"
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/data_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardBackgroundColor="@color/splash_back_color"
+                app:contentPadding="10dp">
+
+
+                <LinearLayout
+                    android:id="@+id/parentTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginBottom="10dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardBackgroundColor="@color/splash_back_color"
-                    app:contentPadding="5dp">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/issuer_company_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/company_giant_inc" />
+
+                    <TextView
+                        android:id="@+id/tNumberOfReceipt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/total_number_of_receipt_issued_" />
+
+                    <TextView
+                        android:id="@+id/numberOfItemsSold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/total_number_of_items_sold" />
+
+                    <TextView
+                        android:id="@+id/totalAmountMade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/total_amount_made" />
+
+                    <TextView
+                        android:id="@+id/highest_receipt_issued_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/item_with_most_receipt" />
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/graph_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardBackgroundColor="@color/splash_back_color"
+                app:contentPadding="5dp">
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/chart1"
@@ -192,6 +197,9 @@
                     android:layout_height="match_parent"/>
 
             </androidx.cardview.widget.CardView>
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

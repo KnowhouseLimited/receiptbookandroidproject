@@ -3,6 +3,7 @@ package com.knowhouse.thereceiptbook.UtitlityClasses;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
 
 
 import androidx.core.widget.NestedScrollView;
@@ -16,7 +17,7 @@ public class DataClass{
     private Context context;
 
     //Function to feed data to the data feed layout through the
-    public DataClass(String phoneNumber, String date, NestedScrollView view, Context context){
+    public DataClass(String phoneNumber, String date, View view, Context context){
         this.context = context;
 
         if(isNetworkAvailable()){

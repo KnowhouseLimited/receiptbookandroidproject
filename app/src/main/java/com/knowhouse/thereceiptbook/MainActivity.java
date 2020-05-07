@@ -20,6 +20,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
@@ -30,12 +31,16 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.knowhouse.thereceiptbook.FragmentActivities.InboxFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.MainActivityFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.SalesFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.TransactionsFragment;
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
 import com.knowhouse.thereceiptbook.SQLiteDatabaseClasses.TheReceiptBookDatabaseHelper;
+import com.knowhouse.thereceiptbook.Utils.SendNotification;
+import com.onesignal.OneSignal;
 
 import java.io.File;
 
@@ -71,6 +76,20 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);   //capture the toolbar layout
         setSupportActionBar(toolbar);                   //set the action bar support for the toolbar
         getSupportActionBar().setDisplayShowTitleEnabled(false);    //Turn off the title of the action bar
+
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        OneSignal.startInit(this).init();
+        OneSignal.setSubscription(true);
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                assert fUser != null;
+                FirebaseDatabase.getInstance().getReference().child("user").child(fUser.getUid()).child("notificationKey").setValue(userId);
+            }
+        });
+        OneSignal.setInFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification);
+        new SendNotification("testing notification","heading",null);
 
         FloatingActionButton fab = findViewById(R.id.fab);  //capture the floating button layout
         fab.setOnClickListener(view -> {                    //set an onClickListener for the floating action button

@@ -83,10 +83,13 @@ public class SaveDataFeedTask {
                                 listStrings.add(itemWithHighestReceiptNumberPerDay);
                                 listStrings.add(totalOfItemsSoldPerDay);
                                 populateView(listStrings);
+                                //helper.close();
+                                //db.close();
                             }else {
                                 Toast.makeText(context,"Check parameters",Toast.LENGTH_LONG).show();
                             }
                         }
+
 
 
                     } catch (JSONException e) {

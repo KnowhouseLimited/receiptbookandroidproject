@@ -7,12 +7,13 @@ public class LoggedInUser {
 
     private String name;
     private String phone;
+    private String image;
 
     public LoggedInUser(){
 
     }
 
-    public LoggedInUser(String phone,String name) {
+    public LoggedInUser(String phone,String name,String image) {
         this.phone = phone;
         this.name = name;
     }
@@ -31,5 +32,13 @@ public class LoggedInUser {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -66,4 +66,5 @@
     <string name="enter_verification_code">Enter Verification Code</string>
     <string name="verify">Verify</string>
     <string name="verfication_dialog_title">Phone Number Verification</string>
+    <string name="sender_company">Company</string>
 </resources>

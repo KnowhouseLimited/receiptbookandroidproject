@@ -74,6 +74,7 @@ public class SaveGraphTask {
                             }
                         }
                         db.close();
+                        helper.close();
                         populateCardView(item,entry);
                     }catch (JSONException e){
                         e.printStackTrace();

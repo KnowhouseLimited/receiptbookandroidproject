@@ -29,9 +29,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/user_full_name"
+            android:id="@+id/sender_company"
             android:layout_toEndOf="@id/profile_image"
-            android:text="@string/full_name"
+            android:text="@string/sender_company"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
 
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/profile_image"
-            android:layout_below="@id/user_full_name"
+            android:layout_below="@id/sender_company"
             android:text="@string/phone_number"/>
 
         <TextView
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/user_phone_number"
             android:id="@+id/time_of_issue"
-            android:layout_below="@id/user_full_name"
+            android:layout_below="@id/sender_company"
             android:layout_marginStart="5dp"
             android:text="@string/time"/>
 

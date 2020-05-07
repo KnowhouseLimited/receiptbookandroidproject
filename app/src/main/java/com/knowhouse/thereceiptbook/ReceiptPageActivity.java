@@ -2,7 +2,10 @@ package com.knowhouse.thereceiptbook;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,6 +31,10 @@ import com.knowhouse.thereceiptbook.model.LoggedInUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -44,6 +51,8 @@ public class ReceiptPageActivity extends AppCompatActivity {
     //private boolean isSent;
     private FirebaseUser firebaseUser;
     private String userid;
+    private Bitmap bitmap;
+    private String image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +88,6 @@ public class ReceiptPageActivity extends AppCompatActivity {
         final String customer_phone_number = Objects.requireNonNull(customerPhoneNumber.getText()).toString().trim();
         final String amount_paid = Objects.requireNonNull(amountPaid.getText()).toString().trim();
 
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("user");
         StringBuilder myPhoneNum = new StringBuilder(customer_phone_number);
@@ -97,10 +105,27 @@ public class ReceiptPageActivity extends AppCompatActivity {
                         if(loggedInUser.getPhone().equals(internationalPhoneNumber)){
                             userid = dataSnapshot1.getKey();
                         }
+
+                        if(!SharedPrefManager.getInstance(getApplicationContext()).getUserImage().equals("null")){
+                            image = SharedPrefManager.getInstance(getApplicationContext()).getUserImage();
+                        }else{
+                            image = "default";
+                        }
                     }
                 }
 
-                sendMessage(firebaseUser.getUid(),userid,"Hello World");
+                String companyName = SharedPrefManager.getInstance(getApplicationContext()).getUserCompany();
+                Date c = Calendar.getInstance().getTime();
+
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                String currentDate = df.format(c);
+                String messageToSend = "This receipt is being issued to you from "
+                        +SharedPrefManager.getInstance(getApplicationContext()).getUserFullName()+
+                        " for the purchase of "+item_purchased+" which cost an amount of GHS "+ amount_paid;
+
+
+                sendMessage(firebaseUser.getUid(),userid,messageToSend,image,companyName,
+                        currentDate);
             }
 
             @Override
@@ -170,13 +195,16 @@ public class ReceiptPageActivity extends AppCompatActivity {
 
     }
 
-    private void sendMessage(String sender,String receiver,String message){
+    private void sendMessage(String sender,String receiver,String message,String image,
+                             String senderCompany,String time){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender",sender);
+        hashMap.put("image",image);
         hashMap.put("receiver",receiver);
         hashMap.put("message",message);
+        hashMap.put("senderCompany",senderCompany);
+        hashMap.put("time",time);
 
         reference.child("chat").push().setValue(hashMap);
     }

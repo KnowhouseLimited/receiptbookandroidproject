@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -157,6 +158,11 @@ public class LoginActivity extends AppCompatActivity {
                 return params;                                  //return the params hash map to volley
             }
         };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
     }
 
@@ -192,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Map<String, Object> userMap = new HashMap<>();
                                 userMap.put("phone", Objects.requireNonNull(user.getPhoneNumber()));
                                 userMap.put("name",SharedPrefManager.getInstance(getApplicationContext()).getUserFullName());
+                                userMap.put("image","default");
                                 mUserDB.updateChildren(userMap);
                             }
                         }

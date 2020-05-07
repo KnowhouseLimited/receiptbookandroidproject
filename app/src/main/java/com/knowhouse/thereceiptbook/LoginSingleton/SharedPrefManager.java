@@ -3,6 +3,8 @@ package com.knowhouse.thereceiptbook.LoginSingleton;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.File;
+
 public class SharedPrefManager {
     private static SharedPrefManager mInstance;
     private static Context mCtx;
@@ -48,6 +50,7 @@ public class SharedPrefManager {
     public boolean logout(){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARE_PREF_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        deleteCache(mCtx);
         editor.clear();
         editor.apply();
         return true;
@@ -78,5 +81,31 @@ public class SharedPrefManager {
     public String getUserImage(){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARE_PREF_NAME,Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_USERIMAGE,null);
+    }
+
+    private static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            File dbDir = context.getDatabasePath("thereceiptbook");
+            deleteDir(dir);
+            deleteDir(dbDir);
+        } catch (Exception e) { e.printStackTrace();}
+    }
+
+    private static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String child : children) {
+                boolean success = deleteDir(new File(dir, child));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
     }
 }

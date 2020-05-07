@@ -35,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -168,10 +169,10 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         progressDialog.show();
 
         //get text in fields
-        final String userPhoneNumber = phoneNumberEditText.getText().toString().trim();
-        final String userFullName = fullNameEditText.getText().toString().trim();
+        final String userPhoneNumber = Objects.requireNonNull(phoneNumberEditText.getText()).toString().trim();
+        final String userFullName = Objects.requireNonNull(fullNameEditText.getText()).toString().trim();
         final String useridentity = String.valueOf(userid);
-        final String userCompany = companyNameEditText.getText().toString().trim();
+        final String userCompany = Objects.requireNonNull(companyNameEditText.getText()).toString().trim();
 
         final RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).
                 getRequestQueue();
@@ -208,7 +209,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             }
         }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String,String> params = new HashMap<>();
                 params.put("userid",useridentity);
                 params.put("full_name",userFullName);

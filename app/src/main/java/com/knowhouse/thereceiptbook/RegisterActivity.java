@@ -18,9 +18,12 @@ import androidx.fragment.app.FragmentManager;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -101,9 +104,10 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                //signInWithPhoneAuthCredential(phoneAuthCredential);
-                Log.i("OnVerificationCompleted","Verification is completed");
+                if(mVerificationId == null){
                     createUser();
+                }
+
             }
 
 
@@ -117,8 +121,8 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
             public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationId, forceResendingToken);
                 Log.i("OnCodeSent","Called OnCodeSent");
-                    mVerificationId = verificationId;
-                    showEditDialog();
+                mVerificationId = verificationId;
+                showEditDialog();
             }
 
         };
@@ -148,10 +152,10 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
                     try{
                         JSONObject object = new JSONObject(response);   //get the objects using the JSON object from database
                         if(!object.getBoolean("error")){//if the response for error is false the code below will run
-                                //startActivity(new Intent(getApplicationContext(), MainPageActivity.class));
-                                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);  //Create an intent to launch the login activity class
-                                startActivity(intent);  //start the login activity class
-                                finish();       //remove register activity from stack
+                            //startActivity(new Intent(getApplicationContext(), MainPageActivity.class));
+                            Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);  //Create an intent to launch the login activity class
+                            startActivity(intent);  //start the login activity class
+                            finish();       //remove register activity from stack
                         }else{  //if response for error is true then the code below will run
                             Toast.makeText(getApplicationContext(),
                                     "Please Check Your Credentials",Toast.LENGTH_LONG).show();  //this message will display to the user
@@ -161,11 +165,11 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
                     }
                     requestQueue.stop();
                 }, error -> {
-                    progressDialog.dismiss();   //dismiss the progress dialog from the screen
-                    Toast.makeText(getApplicationContext(),"Unable to connect",Toast.LENGTH_LONG).show();    //display message to the user
-                    error.printStackTrace();    //print error to android studio editor
-                    requestQueue.stop();    //stop the request queue
-                }) {
+            progressDialog.dismiss();   //dismiss the progress dialog from the screen
+            Toast.makeText(getApplicationContext(),"Unable to connect",Toast.LENGTH_LONG).show();    //display message to the user
+            error.printStackTrace();    //print error to android studio editor
+            requestQueue.stop();    //stop the request queue
+        }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();   //Create a hash map with key and value
@@ -198,9 +202,25 @@ public class RegisterActivity extends AppCompatActivity implements VerificationD
         verificationDialogFragment.show(fm,"fragment_verification");
     }
 
+    private void verifyPhoneNumberWithCode(String mCode){
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, mCode);
+        signInWithPhoneAuthCredential(credential);
+    }
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) {
+        FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                createUser();
+            }
+        });
+    }
+
     @Override
     public void onFinishedVerificationDialog(String inputText) {
         mCode = inputText;
+        Log.i("OnVerificationCompleted","Verification is completed");
+        verifyPhoneNumberWithCode(mCode);
     }
 
 }

@@ -5,10 +5,13 @@
 
 package com.knowhouse.thereceiptbook;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +35,9 @@ import com.knowhouse.thereceiptbook.FragmentActivities.MainActivityFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.SalesFragment;
 import com.knowhouse.thereceiptbook.FragmentActivities.TransactionsFragment;
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
+import com.knowhouse.thereceiptbook.SQLiteDatabaseClasses.TheReceiptBookDatabaseHelper;
+
+import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -144,7 +150,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id){
             case R.id.logging_out:
-                FirebaseAuth.getInstance().signOut();
+
                 SharedPrefManager.getInstance(this).logout();
                 startActivity(new Intent(this,LoginActivity.class));
                 finish();

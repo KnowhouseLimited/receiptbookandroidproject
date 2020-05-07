@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.knowhouse.thereceiptbook.LoginSingleton.SharedPrefManager;
+import com.knowhouse.thereceiptbook.Utils.SendNotification;
 import com.knowhouse.thereceiptbook.VolleyClasses.MySingleton;
 import com.knowhouse.thereceiptbook.model.LoggedInUser;
 
@@ -53,6 +54,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
     private String userid;
     private Bitmap bitmap;
     private String image;
+    private LoggedInUser loggedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +101,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
                 for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
 
                     Log.i("Chatobject_info","Log issue");
-                    LoggedInUser loggedInUser = dataSnapshot1.getValue(LoggedInUser.class);
+                    loggedInUser = dataSnapshot1.getValue(LoggedInUser.class);
                     assert loggedInUser != null;
                     if(!loggedInUser.getPhone().equals(firebaseUser.getPhoneNumber())){
                         if(loggedInUser.getPhone().equals(internationalPhoneNumber)){
@@ -197,6 +199,7 @@ public class ReceiptPageActivity extends AppCompatActivity {
 
     private void sendMessage(String sender,String receiver,String message,String image,
                              String senderCompany,String time){
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender",sender);
@@ -206,6 +209,25 @@ public class ReceiptPageActivity extends AppCompatActivity {
         hashMap.put("senderCompany",senderCompany);
         hashMap.put("time",time);
 
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("user");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    if(receiver.equals(snapshot.getKey())){
+                        LoggedInUser receiverDetails = snapshot.getValue(LoggedInUser.class);
+                        String messageTrimmed = message.substring(0,20);
+                        assert receiverDetails != null;
+                        new SendNotification(messageTrimmed,"Receipt from "+senderCompany,receiverDetails.getNotificationKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         reference.child("chat").push().setValue(hashMap);
     }
 

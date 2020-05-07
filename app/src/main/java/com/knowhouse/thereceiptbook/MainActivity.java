@@ -85,11 +85,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void idsAvailable(String userId, String registrationId) {
                 assert fUser != null;
-                FirebaseDatabase.getInstance().getReference().child("user").child(fUser.getUid()).child("notificationKey").setValue(userId);
+                FirebaseDatabase.getInstance().getReference().child("user").child(fUser.getUid()).
+                        child("notificationKey").setValue(userId);
             }
         });
         OneSignal.setInFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification);
-        new SendNotification("testing notification","heading",null);
+
 
         FloatingActionButton fab = findViewById(R.id.fab);  //capture the floating button layout
         fab.setOnClickListener(view -> {                    //set an onClickListener for the floating action button
